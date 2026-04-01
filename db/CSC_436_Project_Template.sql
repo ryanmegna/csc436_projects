@@ -355,6 +355,66 @@ INSERT INTO `structure_implementation` (`implementation_id`, `structure_id`) VAL
 -- --------------------------------------------------------
 
 --
+-- Table structure for table 'users'
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `password_hash`, `created_at`) VALUES
+(1, 'john.smith@example.com', '$2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36DvDType', '2026-02-01 08:30:00'),
+(2, 'jane.doe@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '2026-02-05 10:15:30'),
+(3, 'bob.johnson@example.com', '$2y$10$zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA', '2026-02-10 14:45:22'),
+(4, 'alice.williams@example.com', '$2y$10$1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrst', '2026-02-15 09:20:15'),
+(5, 'charlie.brown@example.com', '$2y$10$abcDEF123456ghiJKL789opqRST012uvwXYZ345ABCdefGHIjklMNOp', '2026-02-20 11:30:45');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table 'audit_logs'
+--
+
+CREATE TABLE `audit_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` int(11) NOT NULL,
+  `action` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `table_name` varchar(100) COLLATE utf8_unicode_ci,
+  `timestamp` datetime DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `audit_logs`
+--
+
+INSERT INTO `audit_logs` (`id`, `user_id`, `action`, `table_name`, `timestamp`) VALUES
+(1, 1, 'INSERT', 'users', '2026-02-01 08:35:00'),
+(2, 1, 'INSERT', 'language', '2026-02-01 09:10:15'),
+(3, 2, 'INSERT', 'implementation', '2026-02-05 10:20:30'),
+(4, 1, 'UPDATE', 'language', '2026-02-06 11:15:45'),
+(5, 3, 'INSERT', 'structure_implementation', '2026-02-10 15:00:00'),
+(6, 2, 'UPDATE', 'implementation', '2026-02-11 13:25:30'),
+(7, 4, 'INSERT', 'function', '2026-02-15 09:45:20'),
+(8, 1, 'DELETE', 'operator', '2026-02-16 14:30:15'),
+(9, 3, 'UPDATE', 'structure_implementation', '2026-02-18 10:50:40'),
+(10, 5, 'INSERT', 'language', '2026-02-20 12:05:00'),
+(11, 2, 'UPDATE', 'users', '2026-02-21 16:20:30'),
+(12, 4, 'DELETE', 'function', '2026-02-22 08:15:45'),
+(13, 1, 'INSERT', 'operator', '2026-02-23 11:40:20'),
+(14, 3, 'UPDATE', 'language', '2026-02-24 15:10:50'),
+(15, 5, 'INSERT', 'implementation', '2026-02-25 09:30:00');
+
+-- --------------------------------------------------------
+
+--
 -- Indexes for table `language`
 --
 ALTER TABLE `language`
