@@ -1,0 +1,753 @@
+implementation_id,language_id,date_added,example,result,notes,syntax
+1,1,2026-02-22,"print(""Score:"", 95, sep="" "")",Score: 95,Supports multiple arguments with customizable separator,"print(value, sep="" "", end="" "")"
+5,1,2026-02-22,"age = int(input(""Enter your age: ""))",User enters: 25 -> age = 25,Always returns string; cast to int/float as needed,variable = input(prompt)
+8,1,2026-02-22,"words = [""apple"", ""banana"", ""cherry""]
+len(words)",3,"Works on strings, lists, tuples, dicts, sets",len(sequence)
+11,1,2026-02-22,"prices = [29.99, 9.99, 49.99, 19.99]
+prices.sort()","[9.99, 19.99, 29.99, 49.99]",.sort() modifies in place; sorted() returns new list,list.sort() or sorted(iterable)
+14,1,2026-02-22,"nums = [1, 2, 3, 4]
+squared = list(map(lambda x: x**2, nums))","[1, 4, 9, 16]",Returns iterator; wrap in list() to see results,"map(function, iterable)"
+16,1,2026-02-22,"ages = [12, 18, 25, 8, 30]
+adults = list(filter(lambda x: x >= 18, ages))","[18, 25, 30]",Returns elements where function returns True,"filter(function, iterable)"
+18,1,2026-02-22,"csv_line = ""John,25,Engineer""
+fields = csv_line.split("","")","[""John"", ""25"", ""Engineer""]",Default separator is whitespace,string.split(separator)
+20,1,2026-02-22,"words = [""Hello"", ""World"", ""2024""]
+"" "".join(words)",Hello World 2024,Separator is the string you call join on,separator.join(iterable)
+22,1,2026-02-22,"shopping = [""milk"", ""eggs"", ""bread""]
+shopping.append(""butter"")
+shopping[0] = ""almond milk""","[""almond milk"", ""eggs"", ""bread"", ""butter""]","Mutable, ordered, allows duplicates, mixed types OK","my_list = [item1, item2, ...]"
+26,1,2026-02-22,"student = {""name"": ""Emma"", ""gpa"": 3.8, ""year"": 2}
+student[""major""] = ""CS""","{""name"": ""Emma"", ""gpa"": 3.8, ""year"": 2, ""major"": ""CS""}","Keys must be immutable (str, int, tuple)","my_dict = {key: value, ...}"
+29,1,2026-02-22,"tags = {""python"", ""coding"", ""python"", ""tutorial""}
+tags.add(""beginner"")","{""python"", ""coding"", ""tutorial"", ""beginner""}",Duplicates automatically removed; unordered,"my_set = {item1, item2, ...}"
+31,1,2026-02-22,"undo_stack = []
+undo_stack.append(""typed A"")
+undo_stack.append(""typed B"")
+last = undo_stack.pop()","last = ""typed B"", stack = [""typed A""]",Lists work as stacks; collections.deque is faster,stack = [] # use append() and pop()
+33,1,2026-02-22,"from collections import deque
+printer_queue = deque([""doc1"", ""doc2""])
+printer_queue.append(""doc3"")
+next_job = printer_queue.popleft()","next_job = ""doc1"", queue = [""doc2"", ""doc3""]",Use deque for O(1) operations on both ends,from collections import deque; q = deque()
+35,1,2026-02-22,total = 15.99 + 4.50 + 2.00,22.49,Also concatenates strings and lists,a + b
+37,1,2026-02-22,"balance = 1000.00
+balance = balance - 250.75",749.25,Also used for set difference: set1 - set2,a - b
+38,1,2026-02-22,weekly_pay = 25.50 * 40,1020.0,"Also repeats strings: ""ha"" * 3 = ""hahaha""",a * b
+40,1,2026-02-22,"avg = 285 / 3
+whole_avg = 285 // 3","avg = 95.0, whole_avg = 95",/ always returns float; // truncates toward negative infinity,a / b (float) or a // b (integer)
+42,1,2026-02-22,"is_even = 42 % 2
+remainder = 17 % 5","is_even = 0, remainder = 2",Common for checking even/odd or cycling through indices,a % b
+44,1,2026-02-22,"password = ""secret123""
+is_correct = password == ""secret123""",True,"Compares value; use ""is"" to compare identity (same object)",a == b
+46,1,2026-02-22,"status = ""active""
+needs_attention = status != ""active""",False,Returns True if values are different,a != b
+47,1,2026-02-22,"age = 21
+can_drink = age > 20",True,Works with numbers and strings (lexicographic),a > b
+49,1,2026-02-22,"age = 25
+has_license = True
+can_drive = age >= 16 and has_license",True,"Short-circuits: if first is False, second not evaluated",a and b
+51,1,2026-02-22,"is_weekend = day == ""Saturday"" or day == ""Sunday""",True if day is Saturday,"Short-circuits: if first is True, second not evaluated",a or b
+53,1,2026-02-22,"logged_in = False
+show_login_button = not logged_in",True,Inverts boolean value,not a
+55,1,2026-02-22,"name = ""Alice""
+count = 0
+count += 1  # augmented assignment","name=""Alice"", count=1","Also: +=, -=, *=, /=, //=, **=, %=",variable = value
+56,1,2026-03-31,"from functools import reduce
+nums = [1, 2, 3, 4]
+result = reduce(lambda x, y: x + y, nums)",10,Requires import; alternative: sum(list),"reduce(function, iterable)"
+57,1,2026-03-31,"with open(""file.txt"", ""r"") as file:
+  content = file.read()
+  for line in file:
+    print(line)",File content,Context manager auto-closes,"open(filename, mode)"
+115,1,2026-03-31,"result = 42 < 50
+print(result)",True,Lexicographic for strings,a < b
+116,1,2026-03-31,"x = 0b0101
+y = 0b0011
+result = x & y
+print(result)",1,Bitwise AND; b prefix for binary,a & b
+117,1,2026-03-31,"x = 0b0101
+y = 0b0010
+result = x | y
+print(result)",7,Bitwise OR,a | b
+118,1,2026-03-31,"# Python uses == for equality; no ===
+print(5 == 5)",True,Python has no === operator,a == b
+222,1,2026-03-31,"arr = [10, 20, 30, 40, 50]
+val = arr[2]",30,Lists are dynamic; can hold mixed types,"list = [item1, item2, ...]"
+223,1,2026-03-31,"class Node:
+  def __init__(self, data):
+    self.data = data
+    self.next = None
+head = Node(10)",Linked node,Manual pointer-based structure,class Node: def __init__(...)
+224,1,2026-03-31,"class TreeNode:
+  def __init__(self, val):
+    self.val = val
+    self.left = None
+    self.right = None",Binary tree node,Recursive OOP structure,class TreeNode: ...
+225,1,2026-03-31,"graph = {""A"": [""B"", ""C""], ""B"": [""A""]}",Dict-based adjacency,Graph as dictionary,dict as adjacency list
+226,1,2026-03-31,"d = {""apple"": 1.50, ""banana"": 0.75}","{apple:1.5, banana:0.75}",Built-in dict; mutable,"dict = {key: value, ...}"
+2,2,2026-02-22,"std::cout << ""Temperature: "" << 72 << ""F"" << std::endl;",Temperature: 72F,Chain multiple values with << operator,std::cout << value << std::endl;
+6,2,2026-02-22,"int age;
+std::cout << ""Enter age: "";
+std::cin >> age;",User enters: 25 -> age = 25,"Use getline(cin, str) for strings with spaces",std::cin >> variable;
+9,2,2026-02-22,"std::string name = ""Alice"";
+name.size();",5,Returns size_t type; use .length() for strings too,container.size()
+12,2,2026-02-22,"std::vector<int> v = {5, 2, 8, 1};
+std::sort(v.begin(), v.end());","{1, 2, 5, 8}",Requires #include <algorithm>; average O(n log n),"std::sort(begin, end)"
+23,2,2026-02-22,"std::vector<double> temps = {72.5, 68.0, 75.3};
+temps.push_back(71.2);","{72.5, 68.0, 75.3, 71.2}","Dynamic size, contiguous memory, #include <vector>",std::vector<type> name = {values};
+39,2,2026-02-22,double area = 3.14159 * radius * radius;,area of circle calculation,Watch for integer overflow with large numbers,a * b
+50,2,2026-02-22,"bool inStock = true;
+bool hasCredit = true;
+bool canBuy = inStock && hasCredit;",true,"Keyword ""and"" also works in C++",a && b
+58,2,2026-03-31,"std::vector<int> nums = {1, 2, 3, 4};
+std::vector<int> squared;
+std::transform(nums.begin(), nums.end(),
+  std::back_inserter(squared),
+  [](int x) { return x * x; });","[1, 4, 9, 16]",Requires <algorithm>; lambda syntax,std::transform with lambda
+59,2,2026-03-31,"std::vector<int> ages = {12, 18, 25, 8, 30};
+std::vector<int> adults;
+std::copy_if(ages.begin(), ages.end(),
+  std::back_inserter(adults),
+  [](int a) { return a >= 18; });","[18, 25, 30]",std::copy_if filters; requires <algorithm>,std::copy_if with predicate
+60,2,2026-03-31,"std::vector<int> nums = {1, 2, 3, 4};
+int sum = std::accumulate(nums.begin(),
+  nums.end(), 0);",10,Requires <numeric>; accumulates values,"std::accumulate(begin, end, init)"
+61,2,2026-03-31,"std::ifstream file(""data.txt"");
+std::string line;
+std::getline(file, line);",First line,ifstream for reading; getline for lines,std::ifstream(filename)
+62,2,2026-03-31,"std::string str = ""apple,banana,cherry"";
+std::vector<std::string> parts;
+std::stringstream ss(str);
+std::string token;
+while(std::getline(ss, token, ',')) parts.push_back(token);","[apple, banana, cherry]",Manual tokenization; no built-in split,std::getline with delimiter
+63,2,2026-03-31,"std::vector<std::string> words = {""Hello"", ""World""};
+std::string result;
+for(auto& w : words) result += w + "" "";
+result.pop_back();",Hello World,Manual concatenation; boost has join,Manual loop + concatenation
+119,2,2026-03-31,int sum = 15 + 7;,22,Addition,a + b
+120,2,2026-03-31,double diff = 1000.50 - 250.25;,750.25,Subtraction,a - b
+121,2,2026-03-31,int prod = 12 * 8;,96,Multiplication,a * b
+122,2,2026-03-31,"int div = 20 / 3;
+double exact = 20.0 / 3.0;","div=6, exact=6.666",int/int truncates,a / b
+123,2,2026-03-31,"if(5 == 5) std::cout << ""Equal"";",Equal,Equality comparison,a == b
+124,2,2026-03-31,"if(5 != 10) std::cout << ""NotEqual"";",NotEqual,Inequality,a != b
+125,2,2026-03-31,"if(21 > 18) std::cout << ""Greater"";",Greater,Greater than,a > b
+126,2,2026-03-31,"if(85 < 90) std::cout << ""Less"";",Less,Less than,a < b
+127,2,2026-03-31,"bool inStock = true, hasCredit = true;
+if(inStock && hasCredit) std::cout << ""OK"";",OK,Logical AND; short-circuits,a && b
+128,2,2026-03-31,"if(!loggedIn) std::cout << ""Login"";",Login,Logical NOT,!a
+129,2,2026-03-31,int x = 42;,x = 42,Assignment,a = b
+130,2,2026-03-31,int flags = 0x05 & 0x03;,0x01,Bitwise AND,a & b
+131,2,2026-03-31,int flags = 0x05 | 0x02;,0x07,Bitwise OR,a | b
+132,2,2026-03-31,"// C++ uses == for all equality; no ===
+if(5 == 5) { }",Not applicable,C++ has no === operator,a == b
+227,2,2026-03-31,"int arr[5] = {10, 20, 30, 40, 50};
+int val = arr[2];",30,Fixed-size; stack-based,type array[size]
+228,2,2026-03-31,"std::map<std::string, double> prices;
+prices[""apple""] = 1.50;
+prices[""banana""] = 0.75;","{apple:1.5, banana:0.75}",Ordered by key; std::unordered_map faster,"std::map<K, V>"
+229,2,2026-03-31,"std::set<int> nums = {1, 3, 5, 3, 1};
+// Automatically deduplicated","{1, 3, 5}",Ordered; std::unordered_set for speed,std::set<T>
+230,2,2026-03-31,"std::stack<int> stk;
+stk.push(10);
+stk.push(20);
+int top = stk.top();
+stk.pop();",top=20,LIFO; use top/pop,std::stack<T>
+231,2,2026-03-31,"std::queue<int> q;
+q.push(1);
+q.push(2);
+int first = q.front();
+q.pop();",first=1,FIFO; use front/pop,std::queue<T>
+232,2,2026-03-31,"struct Node { int data; Node *next; };
+Node *head = new Node();
+head->data = 10;",Node pointer,Manual new/delete,struct with *next
+233,2,2026-03-31,"std::set<int> s = {1, 3, 5, 3};
+// Duplicates removed","{1, 3, 5}",Ordered unique elements,std::set<T>
+234,2,2026-03-31,"std::stack<int> st;
+st.push(10); st.push(20);
+int t = st.top(); st.pop();",LIFO: 20->10,Container adapter,std::stack<T>
+235,2,2026-03-31,"std::queue<int> q;
+q.push(1); q.push(2);
+int f = q.front(); q.pop();",FIFO: 1->2,Container adapter,std::queue<T>
+3,3,2026-02-22,"System.out.println(""Items in cart: "" + 5);",Items in cart: 5,Use + for string concatenation,System.out.println(value);
+7,3,2026-02-22,"Scanner sc = new Scanner(System.in);
+String name = sc.nextLine();","User enters: Alice -> name = ""Alice""","Use nextInt(), nextDouble() for other types",Scanner sc = new Scanner(System.in); sc.nextLine();
+10,3,2026-02-22,"int[] nums = {10, 20, 30, 40};
+nums.length;",4,"Arrays use .length (no parens), Strings use .length(), Collections use .size()",array.length or string.length() or list.size()
+13,3,2026-02-22,"List<String> names = Arrays.asList(""Zoe"", ""Amy"", ""Max"");
+Collections.sort(names);","[Amy, Max, Zoe]",Use Comparator for custom sorting,Arrays.sort(array) or Collections.sort(list)
+24,3,2026-02-22,"ArrayList<String> colors = new ArrayList<>();
+colors.add(""red"");
+colors.add(""blue"");","[red, blue]",Resizable array; use LinkedList for frequent insertions,ArrayList<Type> list = new ArrayList<>();
+27,3,2026-02-22,"HashMap<String, Double> prices = new HashMap<>();
+prices.put(""apple"", 1.50);
+prices.put(""banana"", 0.75);","{apple=1.5, banana=0.75}",O(1) average lookup; use TreeMap for sorted keys,"HashMap<K, V> map = new HashMap<>();"
+30,3,2026-02-22,"HashSet<Integer> lottery = new HashSet<>();
+lottery.add(7);
+lottery.add(14);
+lottery.add(7);","[7, 14]","No duplicates, no guaranteed order; use TreeSet for sorted",HashSet<Type> set = new HashSet<>();
+32,3,2026-02-22,"Stack<String> history = new Stack<>();
+history.push(""page1"");
+history.push(""page2"");
+String back = history.pop();","back = ""page2"", stack = [page1]",Prefer Deque interface: ArrayDeque for better performance,Stack<Type> stack = new Stack<>();
+34,3,2026-02-22,"Queue<String> tickets = new LinkedList<>();
+tickets.offer(""customer1"");
+tickets.offer(""customer2"");
+String next = tickets.poll();","next = ""customer1"", queue = [customer2]",offer/poll preferred over add/remove (no exceptions),Queue<Type> q = new LinkedList<>();
+36,3,2026-02-22,int hoursWorked = 8 + 6 + 9;,23,String + int auto-converts int to String,a + b
+41,3,2026-02-22,"int pages = 100 / 3;
+double exactPages = 100.0 / 3;","pages = 33, exactPages = 33.333...",int/int = int (truncated); use doubles for decimals,a / b
+48,3,2026-02-22,"int temperature = 32;
+boolean freezing = temperature < 33;",true,Returns boolean primitive,a < b
+54,3,2026-02-22,"boolean isEmpty = list.isEmpty();
+boolean hasItems = !isEmpty;",true if list has items,"Prefix operator, highest precedence among logical ops",!a
+64,3,2026-03-31,"List<Integer> nums = Arrays.asList(1, 2, 3, 4);
+List<Integer> squared = nums.stream()
+  .map(x -> x * x)
+  .collect(Collectors.toList());","[1, 4, 9, 16]",Streams API; functional style,stream().map(...).collect()
+65,3,2026-03-31,"List<Integer> ages = Arrays.asList(12, 18, 25, 8, 30);
+List<Integer> adults = ages.stream()
+  .filter(a -> a >= 18)
+  .collect(Collectors.toList());","[18, 25, 30]",Streams filter; lambda syntax,stream().filter(...).collect()
+66,3,2026-03-31,"List<Integer> nums = Arrays.asList(1, 2, 3, 4);
+int sum = nums.stream()
+  .reduce(0, (a, b) -> a + b);",10,reduce with initial value,"stream().reduce(init, ...)"
+67,3,2026-03-31,"Scanner sc = new Scanner(new File(""file.txt""));
+while(sc.hasNextLine()) {
+  String line = sc.nextLine();
+}",File content,Scanner for reading; try-with-resources recommended,new Scanner(new File(path))
+68,3,2026-03-31,"String line = ""John,25,Engineer"";
+String[] parts = line.split("","");","[John, 25, Engineer]",Returns array,string.split(regex)
+69,3,2026-03-31,"String[] words = {""Hello"", ""World""};
+String result = String.join("" "", words);",Hello World,Static method; opposite of split,"String.join(sep, array)"
+133,3,2026-03-31,int diff = 15 - 7;,8,Subtraction,a - b
+134,3,2026-03-31,int prod = 12 * 8;,96,Multiplication,a * b
+135,3,2026-03-31,int mod = 17 % 5;,2,Modulo remainder,a % b
+136,3,2026-03-31,"if(5 == 5) System.out.println(""Equal"");",Equal,Equality for primitives,a == b
+137,3,2026-03-31,"if(5 != 10) System.out.println(""NotEqual"");",NotEqual,Inequality,a != b
+138,3,2026-03-31,"if(21 > 18) System.out.println(""Greater"");",Greater,Greater than,a > b
+139,3,2026-03-31,"boolean adult = true, licensed = true;
+if(adult && licensed) System.out.println(""OK"");",OK,Logical AND; short-circuits,a && b
+140,3,2026-03-31,"boolean weekend = day == 6 || day == 0;
+if(weekend) System.out.println(""Weekend"");",Weekend,Logical OR; short-circuits,a || b
+141,3,2026-03-31,int x = 42;,x = 42,Assignment,a = b
+142,3,2026-03-31,int flags = 0x05 & 0x03;,0x01,Bitwise AND,a & b
+143,3,2026-03-31,int flags = 0x05 | 0x02;,0x07,Bitwise OR,a | b
+144,3,2026-03-31,"// Java uses == for reference comparison; .equals() for values
+if(obj1.equals(obj2)) { }",Equality testing,"Unlike ===, Java uses .equals()",object.equals(other)
+236,3,2026-03-31,"int[] arr = {10, 20, 30, 40, 50};
+int val = arr[2];",30,Fixed-size; stack-based,type[] array = {...}
+237,3,2026-03-31,"LinkedList<Integer> list = new LinkedList<>();
+list.add(10);
+list.add(20);","[10, 20]",Pointer-based; efficient insert/delete,new LinkedList<T>()
+238,3,2026-03-31,"class TreeNode { int val; TreeNode left, right; }
+TreeNode root = new TreeNode();
+root.val = 5;",Binary tree,Recursive structure,class TreeNode { ... }
+239,3,2026-03-31,"// Adjacency list
+List<Integer>[] graph = new List[V];
+for(int i = 0; i < V; i++)
+  graph[i] = new ArrayList<>();",Graph adjacency,Graph representation,List<Integer>[]
+240,3,2026-03-31,"Map<String, Double> table = new HashMap<>();
+table.put(""apple"", 1.50);
+table.put(""banana"", 0.75);","{apple:1.5, banana:0.75}",Key-value pairs,"new HashMap<K, V>()"
+4,4,2026-02-22,console.log(`User ${name} logged in`);,User John logged in,Template literals use backticks and ${} for interpolation,console.log(value);
+15,4,2026-02-22,"const prices = [10, 20, 30];
+const withTax = prices.map(p => p * 1.08);","[10.8, 21.6, 32.4]",Arrow functions make this concise,array.map(callback)
+17,4,2026-02-22,"const scores = [85, 42, 93, 67, 55];
+const passing = scores.filter(s => s >= 60);","[85, 93, 67]",Returns new array with elements that pass the test,array.filter(callback)
+19,4,2026-02-22,"const path = ""home/user/documents"";
+const parts = path.split(""/"");","[""home"", ""user"", ""documents""]",Can use regex as separator,string.split(separator)
+21,4,2026-02-22,"const tags = [""python"", ""javascript"", ""sql""];
+tags.join("", "");","python, javascript, sql",Default separator is comma,array.join(separator)
+25,4,2026-02-22,"const fruits = [""apple"", ""mango""];
+fruits.push(""kiwi"");
+fruits.unshift(""grape"");","[""grape"", ""apple"", ""mango"", ""kiwi""]","push=end, unshift=start, pop=remove end, shift=remove start","const arr = [item1, item2];"
+28,4,2026-02-22,"const config = {theme: ""dark"", fontSize: 14};
+config.language = ""en"";","{theme: ""dark"", fontSize: 14, language: ""en""}",Use Map for non-string keys or frequent add/delete,const obj = {key: value}; or new Map()
+43,4,2026-02-22,const hour24 = 27 % 24;,3,"Useful for wrapping values (clock, array index cycling)",a % b
+45,4,2026-02-22,"""5"" === 5
+""5"" == 5","false, true",Always prefer === to avoid type coercion bugs,a === b (strict) or a == b (loose)
+52,4,2026-02-22,"const username = inputName || ""Guest"";","""Guest"" if inputName is empty/null",Often used for default values; consider ?? for nullish only,a || b
+70,4,2026-03-31,"const readline = require(""readline"");
+const rl = readline.createInterface({ input: process.stdin });
+rl.question(""Enter: "", (answer) => {
+  console.log(answer);
+});",User input captured,Node.js readline module,readline.createInterface(...)
+71,4,2026-03-31,"const arr = [""apple"", ""banana""];
+const len = arr.length;",2,"Works on strings, arrays, objects",array.length
+72,4,2026-03-31,"const nums = [5, 2, 9, 1];
+nums.sort((a, b) => a - b);
+console.log(nums);","[1, 2, 5, 9]",Comparator function for custom order,"array.sort((a,b) => a-b)"
+73,4,2026-03-31,"const nums = [1, 2, 3, 4];
+const sum = nums.reduce((acc, n) => acc + n, 0);",10,Reduce with initial value,"array.reduce((acc, x) => ..., init)"
+74,4,2026-03-31,"const fs = require(""fs"");
+const content = fs.readFileSync(""file.txt"", ""utf8"");
+console.log(content);",File content,readFileSync is blocking,"fs.readFileSync(path, encoding)"
+145,4,2026-03-31,console.log(15 + 7);,22,Numeric addition; also string concat,a + b
+146,4,2026-03-31,console.log(1000.50 - 250.25);,750.25,Subtraction,a - b
+147,4,2026-03-31,console.log(12 * 8);,96,Multiplication,a * b
+148,4,2026-03-31,console.log(20 / 3);,6.666...,JavaScript division always returns float,a / b
+149,4,2026-03-31,"if(5 == 5) console.log(""Equal"");",Equal,Loose equality; coerces types,a == b
+150,4,2026-03-31,"if(5 != 10) console.log(""NotEqual"");",NotEqual,Loose inequality,a != b
+151,4,2026-03-31,"if(21 > 18) console.log(""Greater"");",Greater,Greater than,a > b
+152,4,2026-03-31,"if(85 < 90) console.log(""Less"");",Less,Less than,a < b
+153,4,2026-03-31,"if(adult && licensed) console.log(""OK"");",OK,Logical AND; short-circuits,a && b
+154,4,2026-03-31,"if(!loggedIn) console.log(""Login"");",Login,Logical NOT,!a
+155,4,2026-03-31,let x = 42;,x = 42,Variable assignment,let x = value
+156,4,2026-03-31,console.log(0b0101 & 0b0011);,1,Bitwise AND,a & b
+157,4,2026-03-31,console.log(0b0101 | 0b0010);,7,Bitwise OR,a | b
+241,4,2026-03-31,"const arr = [10, 20, 30, 40, 50];
+const val = arr[2];",30,Dynamic; 0-indexed,const arr = [...]
+242,4,2026-03-31,"const set = new Set([1, 3, 5, 1]);
+console.log(set);","Set(3) {1, 3, 5}",Built-in Set; auto deduplicates,new Set([...])
+243,4,2026-03-31,"class Stack {
+  constructor() { this.items = []; }
+  push(x) { this.items.push(x); }
+  pop() { return this.items.pop(); }
+}",LIFO structure,Manual class-based implementation,class Stack { ... }
+244,4,2026-03-31,"class Queue {
+  constructor() { this.items = []; }
+  enqueue(x) { this.items.push(x); }
+  dequeue() { return this.items.shift(); }
+}",FIFO structure,Manual class-based implementation,class Queue { ... }
+245,4,2026-03-31,"// Linked list with objects
+class Node { constructor(data) { this.data = data; this.next = null; } }
+let head = new Node(10);
+head.next = new Node(20);",Linked node chain,OOP-based pointer chain,class Node { ... }
+246,4,2026-03-31,"// Tree node
+class TreeNode {
+  constructor(val) {
+    this.val = val;
+    this.left = null;
+    this.right = null;
+  }
+}",Binary tree node,Recursive OOP structure,class TreeNode { ... }
+247,4,2026-03-31,"// Graph as adjacency list
+let graph = {
+  ""A"": [""B"", ""C""],
+  ""B"": [""A""],
+  ""C"": [""A""]
+};
+console.log(graph[""A""]);","[""B"", ""C""]",Object as adjacency list,const graph = { ... }
+248,4,2026-03-31,"const hashTable = new Map();
+hashTable.set(""apple"", 1.50);
+hashTable.set(""banana"", 0.75);
+console.log(hashTable);",Map size: 2,Built-in Map for key-value,new Map()
+75,5,2026-03-31,"printf(""Score: %d\n"", 95);",Score: 95,"Use format specifiers: %d=int, %f=float, %s=string","printf(format, ...)"
+76,5,2026-03-31,"int age; scanf(""%d"", &age);  // User: 25",age = 25,Always use & for address-of; use fgets for strings,"scanf(format, ...)"
+77,5,2026-03-31,"char name[] = ""Alice"";
+int len = strlen(name);",5,Returns length excluding null terminator,strlen(string)
+78,5,2026-03-31,"int arr[] = {5, 2, 8, 1};
+int compare(const void *a, const void *b) {
+  return *(int*)a - *(int*)b;
+}
+qsort(arr, 4, sizeof(int), compare);","[1, 2, 5, 8]",Requires custom compare function; O(n log n),"qsort(ptr, count, size, compare)"
+79,5,2026-03-31,"int nums[] = {1, 2, 3, 4};
+int squared[4];
+for(int i = 0; i < 4; i++)
+  squared[i] = nums[i] * nums[i];","[1, 4, 9, 16]",C has no map; use loops,for(int i=0; i<n; i++) { }
+80,5,2026-03-31,"int ages[] = {12, 18, 25, 8, 30};
+int adults[5], count = 0;
+for(int i = 0; i < 5; i++)
+  if(ages[i] >= 18) adults[count++] = ages[i];","[18, 25, 30]",Manual filter with separate counter,if(condition) { }
+81,5,2026-03-31,"int nums[] = {1, 2, 3, 4};
+int sum = 0;
+for(int i = 0; i < 4; i++) sum += nums[i];",10,Accumulation loop pattern,"for(...) { acc = op(acc, item); }"
+82,5,2026-03-31,"FILE *fp = fopen(""file.txt"", ""r"");
+char line[256];
+if(fp) { fgets(line, 256, fp); fclose(fp); }",Reads first line,"Modes: ""r"", ""w"", ""a""; always close","fopen(filename, mode)"
+83,5,2026-03-31,"char str[] = ""apple,banana,cherry"";
+char *token = strtok(str, "","");
+while(token) {
+  printf(""%s\n"", token);
+  token = strtok(NULL, "","");
+}","apple
+banana
+cherry",Modifies string; use strcpy first if original needed,"strtok(string, delim)"
+84,5,2026-03-31,"char result[100] = """";
+snprintf(result, 100, ""%s %s"", ""Hello"", ""World"");",Hello World,Use snprintf instead of strcat (safer),"sprintf(dest, format, ...) or strcat"
+158,5,2026-03-31,"package main
+fmt.Println(15 + 7)",22,Numeric addition,a + b
+159,5,2026-03-31,"package main
+fmt.Println(1000.50 - 250.25)",750.25,Numeric subtraction,a - b
+160,5,2026-03-31,"package main
+fmt.Println(12 * 8)",96,Numeric multiplication,a * b
+161,5,2026-03-31,"package main
+fmt.Println(20 / 3, 20.0 / 3.0)",6 6.666...,int/int truncates,a / b
+162,5,2026-03-31,"package main
+fmt.Println(17 % 5)",2,Modulo remainder,a % b
+163,5,2026-03-31,"package main
+if 5 == 5 { fmt.Println(""Equal"") }",Equal,Value equality,a == b
+164,5,2026-03-31,"package main
+if 5 != 10 { fmt.Println(""Not"") }",Not,Inequality,a != b
+165,5,2026-03-31,"package main
+if 21 > 18 { fmt.Println(""Greater"") }",Greater,Greater than,a > b
+166,5,2026-03-31,"package main
+if 85 < 90 { fmt.Println(""Less"") }",Less,Less than,a < b
+167,5,2026-03-31,"package main
+if age >= 18 && license { fmt.Println(""OK"") }",OK,Logical AND; short-circuits,a && b
+168,5,2026-03-31,"package main
+if day == 6 || day == 0 { fmt.Println(""Weekend"") }",Weekend,Logical OR; short-circuits,a || b
+169,5,2026-03-31,"package main
+if !loggedIn { fmt.Println(""Login"") }",Login,Logical NOT,!a
+170,5,2026-03-31,"package main
+x := 42
+y := x
+fmt.Println(y)",42,:= declares and assigns,a := b
+171,5,2026-03-31,"package main
+fmt.Println(0b0101 & 0b0011)",1,Bitwise AND,a & b
+172,5,2026-03-31,"package main
+fmt.Println(0b0101 | 0b0010)",7,Bitwise OR,a | b
+173,5,2026-03-31,"package main
+// Go has == only, no ===
+fmt.Println(5 == 5)",true,Go uses == for all equality,a == b
+249,5,2026-03-31,"package main
+arr := [5]int{10, 20, 30, 40, 50}
+val := arr[2]",30,Fixed-size array,[n]type{values}
+250,5,2026-03-31,"package main
+type Node struct { data int; next *Node }
+head := &Node{data: 10}",Node pointer,Pointer-based linked list,type Node struct { *next }
+251,5,2026-03-31,"package main
+type TreeNode struct { val int; left, right *TreeNode }
+root := &TreeNode{val: 5}",Tree node,Recursive pointer structure,"type TreeNode struct { *left, *right }"
+252,5,2026-03-31,"package main
+graph := map[string][]string{
+  ""A"": {""B"", ""C""},
+  ""B"": {""A""},
+}
+fmt.Println(graph[""A""])",[B C],Adjacency list as map,map[string][]string
+253,5,2026-03-31,"package main
+type Node struct { key string; val int; next *Node }
+// Manual hash with probing",Hash chain,No built-in hash; use map instead,struct with chaining
+254,5,2026-03-31,"package main
+stack := []int{}
+stack = append(stack, 10)
+stack = append(stack, 20)
+top := stack[len(stack)-1]",20,Slice as stack,"append(slice, item)"
+255,5,2026-03-31,"package main
+queue := []int{}
+queue = append(queue, 1)
+queue = append(queue, 2)
+first := queue[0]
+queue = queue[1:]",1,Slice as queue,append/slice operations
+256,5,2026-03-31,"package main
+set := make(map[int]bool)
+set[1] = true
+set[3] = true
+_, exists := set[1]",map[int]bool pattern,No Set; use map[T]bool,map[type]bool
+257,5,2026-03-31,"package main
+dict := map[string]int{
+  ""apple"": 1,
+  ""banana"": 2,
+}
+val := dict[""apple""]",1,Built-in map as dict,map[K]V{...}
+258,5,2026-03-31,"package main
+type Point struct { X, Y int }
+p := Point{X: 10, Y: 20}
+fmt.Println(p)",{10 20},Struct as custom type,type Name struct { fields }
+85,6,2026-03-31,"puts ""Hello, World!""","Hello, World!",Adds newline automatically,puts(value)
+86,6,2026-03-31,"name = gets.chomp
+puts ""You: #{name}""",You: Alice,gets reads with newline; chomp removes it,gets.chomp or STDIN.gets
+87,6,2026-03-31,"arr = [""a"", ""b"", ""c""]
+len = arr.length",3,.size is alias for .length,array.length
+88,6,2026-03-31,"nums = [5, 2, 9, 1]
+nums.sort!  # in-place
+puts nums.inspect","[1, 2, 5, 9]",.sort! modifies; .sort returns new,array.sort! or .sort
+89,6,2026-03-31,"nums = [1, 2, 3, 4]
+sq = nums.map { |x| x * x }
+puts sq.inspect","[1, 4, 9, 16]",Block: { |x| code } or do...end,array.map { |x| ... }
+90,6,2026-03-31,"ages = [12, 18, 25, 8, 30]
+adults = ages.select { |a| a >= 18 }
+puts adults.inspect","[18, 25, 30]",.select or .filter; returns new array,array.select { |x| ... }
+91,6,2026-03-31,"[1, 2, 3, 4].reduce(0) { |sum, n| sum + n }",10,Also: .inject; takes initial value,"array.reduce(init) { |acc, x| ... }"
+92,6,2026-03-31,"File.open(""data.txt"", ""r"") do |f|
+  f.each_line { |line| puts line }
+end",File content,Block auto-closes file,"File.open(path, mode) { |f| ... }"
+93,6,2026-03-31,"line = ""John,25,Engineer""
+fields = line.split("","")
+puts fields.inspect","[""John"", ""25"", ""Engineer""]",Default: whitespace pattern,string.split(delim)
+94,6,2026-03-31,"words = [""Hello"", ""World""]
+str = words.join("" "")
+puts str",Hello World,Inverse of split; uses separator,array.join(sep)
+174,6,2026-03-31,"x = 15 + 7
+puts x",22,"Also: ""Hello"" + "" World"" = concat",a + b
+175,6,2026-03-31,"balance = 1000.0 - 250.75
+puts balance",749.25,"Also: [1,2,3] - [2]  = [1,3]",a - b
+176,6,2026-03-31,"x = 12 * 8
+puts x",96,"Also: ""ab"" * 3 = ""ababab""",a * b
+177,6,2026-03-31,"div = 20 / 3
+exact = 20.0 / 3
+puts ""#{div}, #{exact}""","6, 6.666...",int/int truncates unless float,a / b
+178,6,2026-03-31,"remainder = 17 % 5
+puts remainder",2,Modulo operation,a % b
+179,6,2026-03-31,"if ""active"" == ""active""
+  puts ""Match""
+end",Match,String equality,a == b
+180,6,2026-03-31,"if 5 != 10
+  puts ""NotEqual""
+end",NotEqual,Inequality,a != b
+181,6,2026-03-31,"if 21 > 18
+  puts ""Adult""
+end",Adult,Greater than,a > b
+182,6,2026-03-31,"if 85 < 90
+  puts ""Below""
+end",Below,Less than,a < b
+183,6,2026-03-31,"age = 25; license = true
+if age >= 18 && license
+  puts ""Drive""
+end",Drive,Logical AND; short-circuits,a && b or a and b
+184,6,2026-03-31,"day = 6
+if day == 6 || day == 0
+  puts ""Weekend""
+end",Weekend,Logical OR; short-circuits,a || b or a or b
+185,6,2026-03-31,"logged = false
+if !logged
+  puts ""Login""
+end",Login,Logical NOT,!a or not a
+186,6,2026-03-31,"x = 42
+y = x
+puts y",42,Assign right to left,a = b
+187,6,2026-03-31,"flags = 0b0101
+result = flags & 0b0011
+puts result",1,Bitwise AND; b prefix = binary,a & b
+188,6,2026-03-31,"flags = 0b0101
+result = flags | 0b0010
+puts result",7,Bitwise OR,a | b
+189,6,2026-03-31,"# Ruby case equality; === checks membership
+case_result = (1..10) === 5
+puts case_result",true,Case equality; useful in case/when,a === b
+259,6,2026-03-31,"arr = [10, 20, 30, 40, 50]
+val = arr[2]
+arr << 60","[10, 20, 30, 40, 50, 60]",Dynamic; grows automatically,array = [items]
+260,6,2026-03-31,"class Node
+  attr_accessor :data, :next
+end
+head = Node.new",Linked node,Class-based pointer structure,class Node; attr_accessor :next
+261,6,2026-03-31,"class TreeNode
+  attr_accessor :val, :left, :right
+end
+root = TreeNode.new",Binary tree,OOP recursive structure,class TreeNode; attr_accessor
+262,6,2026-03-31,"graph = { ""A"" => [""B"", ""C""], ""B"" => [""A""] }
+puts graph[""A""].inspect","[""B"", ""C""]",Hash as adjacency list,hash as graph
+263,6,2026-03-31,"hash = {""apple"" => 1.50, ""banana"" => 0.75}
+puts hash.inspect","{""apple""=>1.5, ""banana""=>0.75}",Built-in Hash,hash = {key => value}
+264,6,2026-03-31,"stack = []
+stack.push(10); stack.push(20)
+top = stack.pop",20,Array as stack,array.push/pop
+265,6,2026-03-31,"queue = []
+queue.push(1); queue.push(2)
+first = queue.shift",1,Array as queue,array.push/shift
+266,6,2026-03-31,"require ""set""
+set = Set.new([1, 3, 5, 1])
+puts set.inspect","#<Set: {1, 3, 5}>",Built-in Set class,Set.new(array)
+267,6,2026-03-31,"dict = {""name"" => ""Alice"", ""age"" => 25}
+puts dict.inspect","{""name""=>""Alice"", ""age""=>25}",Hash as dictionary,hash = {key => val}
+268,6,2026-03-31,"class Point
+  attr_accessor :x, :y
+end
+p = Point.new; p.x = 10; p.y = 20",Point object,Custom struct,class Point; attr_accessor
+95,7,2026-03-31,"package main
+import ""fmt""
+fmt.Println(""Hello, World!"")","Hello, World!",Println adds newline,fmt.Println(value)
+96,7,2026-03-31,"package main
+import (""fmt""; ""bufio""; ""os"")
+scanner := bufio.NewScanner(os.Stdin)
+scanner.Scan()
+name := scanner.Text()",User input captured,Scanner for line input,bufio.NewScanner(os.Stdin)
+97,7,2026-03-31,"package main
+slice := []string{""apple"", ""banana""}
+len := len(slice)
+fmt.Println(len)",2,"len() works on slices, arrays, strings",len(collection)
+98,7,2026-03-31,"package main
+import (""fmt""; ""sort"")
+nums := []int{5, 2, 9, 1}
+sort.Ints(nums)
+fmt.Println(nums)",[1 2 5 9],sort.Ints for int slices,sort.Ints(slice)
+99,7,2026-03-31,"package main
+var result []int
+for _, n := range []int{1,2,3,4} {
+  result = append(result, n*n)
+}
+fmt.Println(result)",[1 4 9 16],No built-in map; use loop,"for _, item := range coll {}"
+100,7,2026-03-31,"package main
+var adults []int
+for _, age := range []int{12,18,25,8,30} {
+  if age >= 18 {
+    adults = append(adults, age)
+  }
+}",[18 25 30],Manual filter; append builds new,"if condition; append(slice, item)"
+101,7,2026-03-31,"package main
+var sum int
+for _, n := range []int{1,2,3,4} {
+  sum += n
+}
+fmt.Println(sum)",10,Accumulation loop,"for _, item := range coll; acc += f(item)"
+102,7,2026-03-31,"package main
+import (""os""; ""io/ioutil"")
+data, _ := ioutil.ReadFile(""file.txt"")
+content := string(data)",File content,ReadFile reads entire file,ioutil.ReadFile(filename)
+103,7,2026-03-31,"package main
+import (""fmt""; ""strings"")
+line := ""apple,banana,cherry""
+parts := strings.Split(line, "","")
+fmt.Println(parts)",[apple banana cherry],strings.Split returns []string,"strings.Split(str, sep)"
+104,7,2026-03-31,"package main
+import (""fmt""; ""strings"")
+words := []string{""Hello"", ""World""}
+result := strings.Join(words, "" "")
+fmt.Println(result)",Hello World,strings.Join reverse of Split,"strings.Join(slice, sep)"
+190,7,2026-03-31,"package main
+fmt.Println(15 + 7)",22,Numeric addition,a + b
+191,7,2026-03-31,"package main
+fmt.Println(1000.50 - 250.25)",750.25,Numeric subtraction,a - b
+192,7,2026-03-31,"package main
+fmt.Println(12 * 8)",96,Multiplication,a * b
+193,7,2026-03-31,"package main
+fmt.Println(20 / 3)",6,Integer division; truncates,a / b
+194,7,2026-03-31,"package main
+fmt.Println(17 % 5)",2,Modulo remainder,a % b
+195,7,2026-03-31,"package main
+if 5 == 5 { fmt.Println(""Equal"") }",Equal,Equality check,a == b
+196,7,2026-03-31,"package main
+if 5 != 10 { fmt.Println(""NotEq"") }",NotEq,Inequality check,a != b
+197,7,2026-03-31,"package main
+if 21 > 18 { fmt.Println(""Greater"") }",Greater,Greater than,a > b
+198,7,2026-03-31,"package main
+if 85 < 90 { fmt.Println(""Less"") }",Less,Less than,a < b
+199,7,2026-03-31,"package main
+if age >= 18 && license { fmt.Println(""OK"") }",OK,Logical AND; short-circuits,a && b
+200,7,2026-03-31,"package main
+if day == 6 || day == 0 { fmt.Println(""Wknd"") }",Wknd,Logical OR; short-circuits,a || b
+201,7,2026-03-31,"package main
+if !loggedIn { fmt.Println(""Login"") }",Login,Logical NOT,!a
+202,7,2026-03-31,"package main
+x := 42
+y := x",42,Assignment with :=,x := value
+203,7,2026-03-31,"package main
+fmt.Println(0b0101 & 0b0011)",1,Bitwise AND,a & b
+204,7,2026-03-31,"package main
+fmt.Println(0b0101 | 0b0010)",7,Bitwise OR,a | b
+205,7,2026-03-31,"package main
+// Go has == only; no ===
+fmt.Println(5 == 5)",true,Go uses == for all equality,a == b
+269,7,2026-03-31,"package main
+arr := [5]int{10, 20, 30, 40, 50}
+val := arr[2]",30,Fixed-size; stack-based,[n]type{values}
+270,7,2026-03-31,"package main
+type Node struct { data int; next *Node }
+head := &Node{data: 10}",Node pointer,Pointer-based structure,type Node struct { *next }
+271,7,2026-03-31,"package main
+type TreeNode struct { val int; left, right *TreeNode }
+root := &TreeNode{val: 5}",Tree node,Recursive struct,type T struct { *left *right }
+272,7,2026-03-31,"package main
+graph := map[string][]string{
+  ""A"": {""B"", ""C""},
+}
+fmt.Println(graph[""A""])",[B C],Adjacency list as map,map[string][]string
+273,7,2026-03-31,"package main
+import ""fmt""
+table := make(map[string]float64)
+table[""apple""] = 1.50",Map: apple=>1.5,Built-in map for hash,map[K]V{}
+274,7,2026-03-31,"package main
+stack := []int{}
+stack = append(stack, 10)
+stack = append(stack, 20)",[10 20],Slice as stack,"append(slice, item)"
+275,7,2026-03-31,"package main
+queue := []int{}
+queue = append(queue, 1)
+first := queue[0]
+queue = queue[1:]",[2],Slice as queue,append/slicing
+276,7,2026-03-31,"package main
+set := make(map[int]bool)
+set[1] = true
+set[3] = true",map[int]bool,Map as set (bool values),map[T]bool
+277,7,2026-03-31,"package main
+dict := map[string]int{
+  ""apple"": 1, ""banana"": 2,
+}
+val := dict[""apple""]",1,Map as dict,map[K]V{...}
+278,7,2026-03-31,"package main
+type Point struct { X, Y int }
+p := Point{X: 10, Y: 20}
+fmt.Println(p)",{10 20},Struct as custom type,type Point struct { X Y int }
+105,8,2026-03-31,"println!(""Hello, World!"");","Hello, World!",Macro with ! suffix; adds newline,println!(args)
+106,8,2026-03-31,"use std::io;
+let mut input = String::new();
+io::stdin().read_line(&mut input).unwrap();
+let name = input.trim();",User input,read_line appends; trim removes newline,io::stdin().read_line()
+107,8,2026-03-31,"let arr = vec![""apple"", ""banana""];
+let len = arr.len();",2,len() for slices and Vec,collection.len()
+108,8,2026-03-31,"let mut nums = vec![5, 2, 9, 1];
+nums.sort();
+println!(""{:?}"", nums);","[1, 2, 5, 9]",.sort() in-place; .clone().sort() for copy,vec.sort()
+109,8,2026-03-31,"let nums = vec![1, 2, 3, 4];
+let squared: Vec<_> = nums.iter().map(|x| x * x).collect();","[1, 4, 9, 16]",Iterator + map + collect pattern,vec.iter().map(|x| ...).collect()
+110,8,2026-03-31,"let ages = vec![12, 18, 25, 8, 30];
+let adults: Vec<_> = ages.iter().filter(|a| a >= &&18).map(|a| *a).collect();","[18, 25, 30]",Iterator:filter + map + collect,vec.iter().filter(...).collect()
+111,8,2026-03-31,"let nums = vec![1, 2, 3, 4];
+let sum: i32 = nums.iter().fold(0, |acc, x| acc + x);
+println!(""{}"", sum);",10,fold instead of reduce for ownership,"vec.iter().fold(init, |acc, x| ...)"
+112,8,2026-03-31,"use std::fs;
+let content = fs::read_to_string(""file.txt"").unwrap();
+println!(""{}"", content);",File content,read_to_string returns Result,fs::read_to_string(path)?
+113,8,2026-03-31,"let line = ""apple,banana,cherry"";
+let parts: Vec<&str> = line.split("","").collect();
+println!(""{:?}"", parts);","[""apple"", ""banana"", ""cherry""]",split returns iterator,string.split(sep).collect()
+114,8,2026-03-31,"let words = vec![""Hello"", "" "", ""World""];
+let result: String = words.join("""");
+println!(""{}"", result);",Hello World,join for iterables; needs &[&str],slice.join(sep)
+206,8,2026-03-31,"println!(""{}"", 15 + 7);",22,Addition,a + b
+207,8,2026-03-31,"println!(""{}"", 1000.50 - 250.25);",750.25,Subtraction,a - b
+208,8,2026-03-31,"println!(""{}"", 12 * 8);",96,Multiplication,a * b
+209,8,2026-03-31,"println!(""{}"", 20 / 3);  // = 6
+println!(""{}"", 20.0 / 3.0);","6, 6.666...",int/int truncates; use f64 for decimals,a / b
+210,8,2026-03-31,"println!(""{}"", 17 % 5);",2,Remainder,a % b
+211,8,2026-03-31,"if 5 == 5 { println!(""Equal""); }",Equal,Equality,a == b
+212,8,2026-03-31,"if 5 != 10 { println!(""Not""); }",Not,Inequality,a != b
+213,8,2026-03-31,"if 21 > 18 { println!(""Greater""); }",Greater,Greater than,a > b
+214,8,2026-03-31,"if 85 < 90 { println!(""Less""); }",Less,Less than,a < b
+215,8,2026-03-31,"let age = 25; let license = true;
+if age >= 18 && license { println!(""OK""); }",OK,Logical AND; short-circuits,a && b
+216,8,2026-03-31,"if day == 6 || day == 0 { println!(""Weekend""); }",Weekend,Logical OR; short-circuits,a || b
+217,8,2026-03-31,"if !logged_in { println!(""Login""); }",Login,Logical NOT,!a
+218,8,2026-03-31,"let x = 42;
+let y = x;",42,Assignment; moves ownership,let y = x;
+219,8,2026-03-31,"println!(""{}"", 0b0101 & 0b0011);",1,Bitwise AND,a & b
+220,8,2026-03-31,"println!(""{}"", 0b0101 | 0b0010);",7,Bitwise OR,a | b
+221,8,2026-03-31,"// Rust uses == for all equality
+println!(""{}"", 5 == 5);",true,Rust has no ===,a == b
+279,8,2026-03-31,"let arr = [10, 20, 30, 40, 50];
+let val = arr[2];
+println!(""{}"", val);",30,Fixed-size; stack-based,[T; size]
+280,8,2026-03-31,"use std::rc::Rc;
+use std::cell::RefCell;
+struct Node { data: i32, next: Option<Rc<RefCell<Node>>> }
+// Manual management",Pointer chain,Rc + RefCell for shared mutable,Rc<RefCell<Node>>
+281,8,2026-03-31,"enum Tree { Node { val: i32, left: Box<Tree>, right: Box<Tree> }, Leaf }
+let root = Tree::Node { val: 5, left: Box::new(...), right: ... };",Binary tree,Enum + Box for recursive type,enum with Box
+282,8,2026-03-31,"use std::collections::HashMap;
+let mut graph: HashMap<String, Vec<String>> = HashMap::new();
+graph.insert(""A"".to_string(), vec![""B"".to_string(), ""C"".to_string()]);",Adjacency list,HashMap + Vectors,"HashMap<K, Vec<V>>"
+283,8,2026-03-31,"use std::collections::HashMap;
+let mut table = HashMap::new();
+table.insert(""apple"", 1.50);
+table.insert(""banana"", 0.75);",Hash table,Built-in HashMap,"HashMap<K, V>"
+284,8,2026-03-31,"let mut stack: Vec<i32> = Vec::new();
+stack.push(10);
+stack.push(20);
+let top = stack.pop();",Some(20),Vec as stack; pop returns Option,vec.push(x); vec.pop()
+285,8,2026-03-31,"use std::collections::VecDeque;
+let mut queue = VecDeque::new();
+queue.push_back(1);
+queue.push_front(2);",VecDeque operations,VecDeque for efficient queue,VecDeque::new()
+286,8,2026-03-31,"use std::collections::HashSet;
+let mut set = HashSet::new();
+set.insert(1);
+set.insert(3);
+set.insert(1);","{1, 3}",Built-in HashSet; auto dedup,HashSet::new()
+287,8,2026-03-31,"use std::collections::HashMap;
+let mut dict = HashMap::new();
+dict.insert(""name"", ""Alice"");
+dict.insert(""age"", 25);",HashMap key-value,Standard HashMap usage,HashMap::new()
+288,8,2026-03-31,"struct Point { x: i32, y: i32 }
+let p = Point { x: 10, y: 20 };
+println!(""{}, {}"", p.x, p.y);","10, 20",Custom struct,struct Name { fields }
