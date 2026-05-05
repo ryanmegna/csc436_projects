@@ -65,6 +65,34 @@ Programming_Language_Lookup/
 2. Make sure `.env` is in the Programming_Language_Lookup root
 3. Visit `mbarbrack.rhody.dev/Programming_Language_Lookup/index.php`
 
+### CLI Tool
+
+1. Move `pll` to your bin folder (`mv pll /usr/local/bin/`)
+2. Replace lines 5–11 with your personal database configuration
+3. Run quick lookups using the following command formats:
+
+#### Basic Lookups
+```
+pll <language> <topic>
+```
+Examples:
+```
+pll python print
+pll c++ list
+```
+
+4. Run cross language comparisons using this scheme:
+
+#### Comparison
+
+```
+pll <source_language> <target_language> <topic>
+```
+Examples:
+```
+pll python c++ list
+pll c++ java print
+```
 ---
 
 ## .env Template
