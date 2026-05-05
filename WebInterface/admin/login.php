@@ -33,20 +33,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin // LangRef</title>
+    <title>Admin // Programming Language Lookup</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg:         #000000;
-            --surface:    #080808;
-            --border-lit: #252525;
-            --green:      #00ff88;
-            --green-dim:  #00cc6a;
-            --green-mute: #003d20;
-            --amber:      #ffb800;
-            --red:        #ff4444;
-            --text:       #c8c8c8;
-            --muted:      #3a3a3a;
+            --bg:         #0d1117;
+            --surface:    #161b22;
+            --border-lit: #363d47;
+            --green:      #3fb950;
+            --green-dim:  #2ea043;
+            --green-mute: #1a4a25;
+            --amber:      #e3b341;
+            --red:        #f85149;
+            --text:       #e6edf3;
+            --muted:      #8b949e;
+            --dim:        #6e7681;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -56,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: var(--bg);
             color: var(--text);
             font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
+            font-size: 17px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -64,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .login-wrap {
             width: 100%;
-            max-width: 380px;
+            max-width: 400px;
             padding: 20px;
         }
 
@@ -80,8 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .login-header .sub {
-            color: var(--muted);
-            font-size: 0.7rem;
+            color: var(--dim);
+            font-size: 0.75rem;
             letter-spacing: 2px;
             margin-top: 4px;
         }
@@ -95,10 +96,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .panel-title {
             padding: 8px 16px;
-            background: #050505;
+            background: #1f2937;
             border-bottom: 1px solid var(--border-lit);
             color: var(--green);
-            font-size: 0.68rem;
+            font-size: 0.75rem;
             letter-spacing: 3px;
             text-transform: uppercase;
         }
@@ -111,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         label {
             display: block;
             color: var(--muted);
-            font-size: 0.67rem;
+            font-size: 0.75rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 7px;
@@ -121,12 +122,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         input[type="text"],
         input[type="password"] {
             width: 100%;
-            background: #030303;
+            background: var(--bg);
             color: var(--green);
             border: 1px solid var(--border-lit);
             padding: 9px 12px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.82rem;
+            font-size: 0.9rem;
             transition: border-color 0.15s;
         }
 
@@ -143,21 +144,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: var(--green);
             border: 1px solid var(--green-dim);
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             cursor: pointer;
             transition: background 0.15s;
             margin-top: 4px;
         }
-        .btn:hover { background: #005a30; }
+        .btn:hover { background: #1a5c2a; }
 
         .error {
-            background: #1a0000;
+            background: #3d0000;
             border: 1px solid var(--red);
             color: var(--red);
             padding: 8px 12px;
-            font-size: 0.78rem;
+            font-size: 0.88rem;
             margin-bottom: 16px;
         }
         .error::before { content: 'ERR: '; }
@@ -166,8 +167,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: block;
             text-align: center;
             margin-top: 14px;
-            color: var(--muted);
-            font-size: 0.72rem;
+            color: var(--dim);
+            font-size: 0.82rem;
             text-decoration: none;
             letter-spacing: 1px;
         }
@@ -177,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="login-wrap">
     <div class="login-header">
-        <div class="brand">LANGREF</div>
+        <div class="brand">Programming Language Lookup</div>
         <div class="sub">admin access</div>
     </div>
 

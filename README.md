@@ -11,13 +11,12 @@ A web-based reference tool for browsing programming language syntax, functions, 
 ```
 Programming_Language_Lookup/
     index.php               # Public browse and compare interface
-    .env                    # Environment variables and forms
-    credentials (not committed)
+    .env                    # Environment variables and credentials (not committed)
     includes/
         database-connection.php   # PDO connection setup
     admin/
         login.php           # Admin login page
-        index.php           # Admin dashboard with insert 
+        index.php           # Admin dashboard with insert forms
         logout.php          # Session destroy and redirect
 ```
 
@@ -29,12 +28,14 @@ Programming_Language_Lookup/
 - Browse functions, operators, and data structures by language, category, and sort order
 - Compare two languages side by side for any selected item
 - Results rendered dynamically via JavaScript fetch requests to PHP endpoints
+- Light mode toggle in the header switches between dark and light themes instantly
 
 **Admin side**
 - Session-based login protected by credentials stored in a .env file
 - Insert new languages, functions, operators, data structures, and implementations
 - Dropdowns populated from the live database
 - Multi-step inserts wrapped in transactions to prevent partial data
+- Light mode toggle available on the admin dashboard
 
 ---
 

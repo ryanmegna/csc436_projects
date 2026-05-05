@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 if (!isset($_SESSION['admin_logged_in'])) {
     header('Location: login.php');
     exit;
@@ -36,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $active = $_POST['active_tab'] ?? 'language';
     try {
         switch ($active) {
+
             case 'language':
                 $name    = trim($_POST['language_name'] ?? '');
                 $version = trim($_POST['version'] ?? '') ?: null;
@@ -88,9 +88,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $notes     = trim($_POST['impl_notes']    ?? '') ?: null;
                 $link_type = $_POST['impl_link_type'] ?? '';
                 $link_id   = (int)($_POST['impl_link_id'] ?? 0);
-                if (!$lang_id)  throw new Exception("Language is required.");
+                if (!$lang_id) throw new Exception("Language is required.");
                 if (!$link_type || !$link_id) throw new Exception("You must link this implementation to a function, operator, or data structure.");
-                $stmt = $pdo->prepare("INSERT INTO implementation (language_id, syntax, example, result, notes, date_added) VALUES (:lang, :syntax, :example, :result, :notes, CURDATE())");
+                $stmt = $pdo->prepare("
+                    INSERT INTO implementation (language_id, syntax, example, result, notes, date_added)
+                    VALUES (:lang, :syntax, :example, :result, :notes, CURDATE())
+                ");
                 $stmt->execute([':lang' => $lang_id, ':syntax' => $syntax, ':example' => $example, ':result' => $result, ':notes' => $notes]);
                 $impl_id = (int)$pdo->lastInsertId();
                 if ($link_type === 'function') {
@@ -117,66 +120,360 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg:#000;--surface:#080808;--border:#1a1a1a;--border-lit:#252525;
-            --green:#00ff88;--green-dim:#00cc6a;--green-mute:#003d20;
-            --amber:#ffb800;--cyan:#00e5ff;--red:#ff4444;--text:#c8c8c8;--muted:#3a3a3a;
+            --bg:         #0d1117;
+            --surface:    #161b22;
+            --border:     #2a3038;
+            --border-lit: #363d47;
+            --green:      #3fb950;
+            --green-dim:  #2ea043;
+            --green-mute: #1a4a25;
+            --amber:      #e3b341;
+            --cyan:       #39c5cf;
+            --red:        #f85149;
+            --text:       #e6edf3;
+            --muted:      #8b949e;
+            --dim:        #6e7681;
         }
-        *{box-sizing:border-box;margin:0;padding:0;}
-        html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;}
-        header{background:var(--surface);border-bottom:1px solid var(--border-lit);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;}
-        .brand-name{color:var(--amber);font-size:1.1rem;font-weight:700;letter-spacing:3px;}
-        .brand-sub{color:var(--muted);font-size:.75rem;letter-spacing:1px;margin-top:2px;}
-        .brand-sub::before{content:'// ';color:var(--green-mute);}
-        .header-right{display:flex;align-items:center;gap:20px;font-size:.72rem;color:var(--muted);}
-        .user{color:var(--amber);}
-        .logout-btn{color:var(--red);text-decoration:none;font-size:.72rem;letter-spacing:1px;border:1px solid #3a0000;padding:4px 10px;}
-        .logout-btn:hover{background:#1a0000;}
-        .tabs{display:flex;border-bottom:1px solid var(--border-lit);background:var(--surface);padding:0 32px;overflow-x:auto;}
-        .tab{padding:10px 18px;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap;}
-        .tab:hover{color:var(--text);}
-        .tab.active{color:var(--amber);border-bottom-color:var(--amber);}
-        .shell{max-width:800px;margin:0 auto;padding:28px 32px 48px;}
-        .prompt-line{color:var(--muted);font-size:.75rem;margin-bottom:22px;}
-        .p-user{color:var(--amber);}.p-host{color:var(--cyan);}
-        .cursor{display:inline-block;width:8px;height:13px;background:var(--amber);vertical-align:middle;margin-left:4px;animation:blink 1.1s step-end infinite;}
-        @keyframes blink{50%{opacity:0;}}
-        .panel{background:var(--surface);border:1px solid var(--border-lit);}
-        .panel-title{padding:8px 16px;background:#050505;border-bottom:1px solid var(--border-lit);color:var(--amber);font-size:.68rem;letter-spacing:3px;text-transform:uppercase;}
-        .panel-title::before{content:'> ';color:#3a2000;}
-        .panel-body{padding:22px 20px;}
-        .field{margin-bottom:18px;}
-        .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;}
-        label{display:block;color:var(--muted);font-size:.67rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;}
-        label::before{content:'// ';color:var(--green-mute);}
-        .required{color:var(--amber);margin-left:4px;}
-        input[type="text"],textarea,select{width:100%;background:#030303;color:var(--green);border:1px solid var(--border-lit);padding:9px 12px;font-family:'JetBrains Mono',monospace;font-size:.82rem;}
-        textarea{resize:vertical;min-height:70px;line-height:1.5;}
-        select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2300ff88' d='M5 6L0 0h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
-        input:focus,textarea:focus,select:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 1px #3a2000;}
-        select option{background:#000;color:var(--green);}
-        .link-group{background:#050505;border:1px solid var(--border);padding:14px 16px;margin-bottom:18px;}
-        .link-group-title{color:var(--cyan);font-size:.67rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
-        .link-group-title::before{content:'>> ';color:#003a3a;}
-        .radio-row{display:flex;gap:20px;margin-bottom:12px;}
-        .radio-label{display:flex;align-items:center;gap:8px;color:var(--text);font-size:.78rem;cursor:pointer;}
-        .radio-label::before{content:none;}
-        input[type="radio"]{accent-color:var(--amber);}
-        .btn{padding:10px 24px;background:var(--green-mute);color:var(--green);border:1px solid var(--green-dim);font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
-        .btn:hover{background:#005a30;}
-        .alert{padding:10px 14px;font-size:.8rem;margin-bottom:20px;border:1px solid;}
-        .alert-success{background:#001a0d;border-color:var(--green-dim);color:var(--green);}
-        .alert-success::before{content:'OK: ';color:var(--green-dim);}
-        .alert-error{background:#1a0000;border-color:var(--red);color:var(--red);}
-        .alert-error::before{content:'ERR: ';}
-        .tab-section{display:none;}
-        .tab-section.active{display:block;}
-        .divider{border:none;border-top:1px solid var(--border);margin:20px 0;}
-        .hint{color:var(--muted);font-size:.68rem;margin-top:5px;}
-        footer{border-top:1px solid var(--border);padding:14px 32px;color:#222;font-size:.68rem;letter-spacing:1px;display:flex;justify-content:space-between;}
-        footer .val{color:#333;}
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 17px;
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.light {
+            --bg:         #ffffff;
+            --surface:    #f6f8fa;
+            --border:     #d0d7de;
+            --border-lit: #c6ccd2;
+            --green:      #1a7f37;
+            --green-dim:  #116329;
+            --green-mute: #dafbe1;
+            --amber:      #9a6700;
+            --cyan:       #0550ae;
+            --red:        #cf222e;
+            --text:       #1f2328;
+            --muted:      #1f2328;
+            --dim:        #1f2328;
+        }
+
+        /*  HEADER  */
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border-lit);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-name {
+            color: var(--amber);
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .brand-sub {
+            color: var(--dim);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .brand-sub::before { content: '// '; color: var(--green-mute); }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: var(--dim);
+        }
+
+        .header-right .user { color: var(--amber); }
+
+        .logout-btn {
+            color: var(--red);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            border: 1px solid var(--red);
+            padding: 4px 10px;
+            transition: background 0.15s;
+        }
+
+        .logout-btn:hover { background: #3d0000; }
+
+        /*  TABS  */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-lit);
+            background: var(--surface);
+            padding: 0 32px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 10px 18px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: var(--muted);
+            border-bottom: 2px solid transparent;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            white-space: nowrap;
+            transition: color 0.15s, border-color 0.15s;
+        }
+
+        .tab:hover { color: var(--text); }
+        .tab.active { color: var(--amber); border-bottom-color: var(--amber); }
+
+        /*  SHELL  */
+        .shell {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 28px 32px 48px;
+            flex: 1;
+        }
+
+        .prompt-line {
+            color: var(--dim);
+            font-size: 0.82rem;
+            margin-bottom: 22px;
+        }
+
+        .p-user { color: var(--amber); }
+        .p-host { color: var(--cyan); }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 13px;
+            background: var(--amber);
+            vertical-align: middle;
+            margin-left: 4px;
+            animation: blink 1.1s step-end infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /*  PANEL  */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border-lit);
+        }
+
+        .panel-title {
+            padding: 8px 16px;
+            background: var(--border);
+            border-bottom: 1px solid var(--border-lit);
+            color: var(--amber);
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .panel-title::before { content: '> '; color: var(--green-mute); }
+
+        .panel-body { padding: 22px 20px; }
+
+        /*  FORM  */
+        .field { margin-bottom: 18px; }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            color: var(--muted);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        label::before { content: '// '; color: var(--green-mute); }
+
+        .required { color: var(--amber); margin-left: 4px; }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            background: var(--surface);
+            color: var(--green);
+            border: 1px solid var(--border-lit);
+            padding: 9px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            transition: border-color 0.15s;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+            line-height: 1.5;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%233fb950' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 28px;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--amber);
+            box-shadow: 0 0 0 1px var(--green-mute);
+        }
+
+        select option { background: var(--surface); color: var(--green); }
+
+        /*  LINK GROUP  */
+        .link-group {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 14px 16px;
+            margin-bottom: 18px;
+        }
+
+        .link-group-title {
+            color: var(--cyan);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .link-group-title::before { content: '>> '; color: var(--green-mute); }
+
+        .radio-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 12px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .radio-label::before { content: none; }
+
+        input[type="radio"] { accent-color: var(--amber); }
+
+        /*  BUTTON  */
+        .btn {
+            padding: 10px 24px;
+            background: var(--green-mute);
+            color: var(--green);
+            border: 1px solid var(--green-dim);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn:hover { background: #1a5c2a; }
+
+        /*  ALERTS  */
+        .alert {
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            border: 1px solid;
+        }
+
+        .alert-success {
+            background: var(--green-mute);
+            border-color: var(--green-dim);
+            color: var(--green);
+        }
+
+        .alert-success::before { content: 'OK: '; color: var(--green-dim); }
+
+        .alert-error {
+            background: #3d0000;
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        .alert-error::before { content: 'ERR: '; }
+
+        /*  TAB SECTIONS  */
+        .tab-section { display: none; }
+        .tab-section.active { display: block; }
+
+        /*  MISC  */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 20px 0;
+        }
+
+        .hint {
+            color: var(--dim);
+            font-size: 0.78rem;
+            margin-top: 5px;
+        }
+
+        /* LIGHT MODE TOGGLE */
+        #theme-toggle {
+            background: none;
+            border: 1px solid var(--border-lit);
+            color: var(--dim);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            cursor: pointer;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        #theme-toggle:hover { color: var(--text); border-color: var(--amber); }
+
+        /*  FOOTER  */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 14px 32px;
+            color: var(--dim);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        footer .val { color: var(--amber); }
     </style>
 </head>
 <body>
+
 <header>
     <div>
         <div class="brand-name">Programming Language Lookup // ADMIN</div>
@@ -184,149 +481,220 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <div class="header-right">
         <span>user: <span class="user"><?= htmlspecialchars($_SESSION['admin_user'], ENT_QUOTES, 'UTF-8') ?></span></span>
+        <button id="theme-toggle" onclick="document.body.classList.toggle('light')">[ light mode ]</button>
         <a class="logout-btn" href="logout.php">// logout</a>
     </div>
 </header>
 
 <div class="tabs">
-    <button class="tab <?= $active==='language'?'active':'' ?>" onclick="switchTab('language')">// language</button>
-    <button class="tab <?= $active==='function'?'active':'' ?>" onclick="switchTab('function')">// function</button>
-    <button class="tab <?= $active==='operator'?'active':'' ?>" onclick="switchTab('operator')">// operator</button>
-    <button class="tab <?= $active==='structure'?'active':'' ?>" onclick="switchTab('structure')">// data structure</button>
-    <button class="tab <?= $active==='implementation'?'active':'' ?>" onclick="switchTab('implementation')">// implementation</button>
+    <button class="tab <?= $active === 'language'       ? 'active' : '' ?>" onclick="switchTab('language')">// language</button>
+    <button class="tab <?= $active === 'function'       ? 'active' : '' ?>" onclick="switchTab('function')">// function</button>
+    <button class="tab <?= $active === 'operator'       ? 'active' : '' ?>" onclick="switchTab('operator')">// operator</button>
+    <button class="tab <?= $active === 'structure'      ? 'active' : '' ?>" onclick="switchTab('structure')">// data structure</button>
+    <button class="tab <?= $active === 'implementation' ? 'active' : '' ?>" onclick="switchTab('implementation')">// implementation</button>
 </div>
 
 <div class="shell">
+
     <div class="prompt-line">
-        <span class="p-user">admin</span>@<span class="p-host">Programming Language Lookup</span>:~$ INSERT INTO database --interactive
+        <span class="p-user">admin</span>@<span class="p-host">Programming Language Lookup</span>:~$
+        INSERT INTO database --interactive
     </div>
 
     <?php if ($success): ?>
         <div class="alert alert-success"><?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?></div>
     <?php endif; ?>
+
     <?php if ($error): ?>
         <div class="alert alert-error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
     <?php endif; ?>
 
-    <!-- LANGUAGE -->
-    <div id="section-language" class="tab-section <?= $active==='language'?'active':'' ?>">
-        <div class="panel"><div class="panel-title">add language</div><div class="panel-body">
-        <form method="POST" action="index.php">
-            <input type="hidden" name="active_tab" value="language">
-            <div class="field-row">
-                <div class="field"><label>language name <span class="required">*</span></label>
-                    <input type="text" name="language_name" maxlength="100" placeholder="e.g. Python" required></div>
-                <div class="field"><label>version</label>
-                    <input type="text" name="version" maxlength="50" placeholder="e.g. 3.x"></div>
+    <!--  ADD LANGUAGE  -->
+    <div id="section-language" class="tab-section <?= $active === 'language' ? 'active' : '' ?>">
+        <div class="panel">
+            <div class="panel-title">add language</div>
+            <div class="panel-body">
+                <form method="POST" action="index.php">
+                    <input type="hidden" name="active_tab" value="language">
+                    <div class="field-row">
+                        <div class="field">
+                            <label>language name <span class="required">*</span></label>
+                            <input type="text" name="language_name" maxlength="100" placeholder="e.g. Python" required>
+                        </div>
+                        <div class="field">
+                            <label>version</label>
+                            <input type="text" name="version" maxlength="50" placeholder="e.g. 3.x">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">// insert language</button>
+                </form>
             </div>
-            <button type="submit" class="btn">// insert language</button>
-        </form>
-        </div></div>
+        </div>
     </div>
 
-    <!-- FUNCTION -->
-    <div id="section-function" class="tab-section <?= $active==='function'?'active':'' ?>">
-        <div class="panel"><div class="panel-title">add function</div><div class="panel-body">
-        <form method="POST" action="index.php">
-            <input type="hidden" name="active_tab" value="function">
-            <div class="field-row">
-                <div class="field"><label>function name <span class="required">*</span></label>
-                    <input type="text" name="function_name" maxlength="100" placeholder="e.g. print" required></div>
-                <div class="field"><label>category</label>
-                    <input type="text" name="function_category" maxlength="100" placeholder="e.g. I/O"></div>
+    <!--  ADD FUNCTION  -->
+    <div id="section-function" class="tab-section <?= $active === 'function' ? 'active' : '' ?>">
+        <div class="panel">
+            <div class="panel-title">add function</div>
+            <div class="panel-body">
+                <form method="POST" action="index.php">
+                    <input type="hidden" name="active_tab" value="function">
+                    <div class="field-row">
+                        <div class="field">
+                            <label>function name <span class="required">*</span></label>
+                            <input type="text" name="function_name" maxlength="100" placeholder="e.g. print" required>
+                        </div>
+                        <div class="field">
+                            <label>category</label>
+                            <input type="text" name="function_category" maxlength="100" placeholder="e.g. I/O">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>description</label>
+                        <textarea name="function_description" placeholder="e.g. Outputs text to standard output"></textarea>
+                    </div>
+                    <button type="submit" class="btn">// insert function</button>
+                </form>
             </div>
-            <div class="field"><label>description</label>
-                <textarea name="function_description" placeholder="e.g. Outputs text to standard output"></textarea></div>
-            <button type="submit" class="btn">// insert function</button>
-        </form>
-        </div></div>
+        </div>
     </div>
 
-    <!-- OPERATOR -->
-    <div id="section-operator" class="tab-section <?= $active==='operator'?'active':'' ?>">
-        <div class="panel"><div class="panel-title">add operator</div><div class="panel-body">
-        <form method="POST" action="index.php">
-            <input type="hidden" name="active_tab" value="operator">
-            <div class="field-row">
-                <div class="field"><label>operator name <span class="required">*</span></label>
-                    <input type="text" name="operator_name" maxlength="100" placeholder="e.g. Addition" required></div>
-                <div class="field"><label>symbol</label>
-                    <input type="text" name="operator_symbol" maxlength="20" placeholder="e.g. +"></div>
+    <!--  ADD OPERATOR  -->
+    <div id="section-operator" class="tab-section <?= $active === 'operator' ? 'active' : '' ?>">
+        <div class="panel">
+            <div class="panel-title">add operator</div>
+            <div class="panel-body">
+                <form method="POST" action="index.php">
+                    <input type="hidden" name="active_tab" value="operator">
+                    <div class="field-row">
+                        <div class="field">
+                            <label>operator name <span class="required">*</span></label>
+                            <input type="text" name="operator_name" maxlength="100" placeholder="e.g. Addition" required>
+                        </div>
+                        <div class="field">
+                            <label>symbol</label>
+                            <input type="text" name="operator_symbol" maxlength="20" placeholder="e.g. +">
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label>category</label>
+                            <input type="text" name="operator_category" maxlength="100" placeholder="e.g. Arithmetic">
+                        </div>
+                        <div></div>
+                    </div>
+                    <div class="field">
+                        <label>description</label>
+                        <textarea name="operator_description" placeholder="e.g. Adds two operands"></textarea>
+                    </div>
+                    <button type="submit" class="btn">// insert operator</button>
+                </form>
             </div>
-            <div class="field-row">
-                <div class="field"><label>category</label>
-                    <input type="text" name="operator_category" maxlength="100" placeholder="e.g. Arithmetic"></div>
-                <div></div>
-            </div>
-            <div class="field"><label>description</label>
-                <textarea name="operator_description" placeholder="e.g. Adds two operands"></textarea></div>
-            <button type="submit" class="btn">// insert operator</button>
-        </form>
-        </div></div>
+        </div>
     </div>
 
-    <!-- STRUCTURE -->
-    <div id="section-structure" class="tab-section <?= $active==='structure'?'active':'' ?>">
-        <div class="panel"><div class="panel-title">add data structure</div><div class="panel-body">
-        <form method="POST" action="index.php">
-            <input type="hidden" name="active_tab" value="structure">
-            <div class="field-row">
-                <div class="field"><label>structure name <span class="required">*</span></label>
-                    <input type="text" name="structure_name" maxlength="100" placeholder="e.g. Hash Table" required></div>
-                <div class="field"><label>category</label>
-                    <input type="text" name="structure_category" maxlength="100" placeholder="e.g. Associative"></div>
+    <!--  ADD DATA STRUCTURE  -->
+    <div id="section-structure" class="tab-section <?= $active === 'structure' ? 'active' : '' ?>">
+        <div class="panel">
+            <div class="panel-title">add data structure</div>
+            <div class="panel-body">
+                <form method="POST" action="index.php">
+                    <input type="hidden" name="active_tab" value="structure">
+                    <div class="field-row">
+                        <div class="field">
+                            <label>structure name <span class="required">*</span></label>
+                            <input type="text" name="structure_name" maxlength="100" placeholder="e.g. Hash Table" required>
+                        </div>
+                        <div class="field">
+                            <label>category</label>
+                            <input type="text" name="structure_category" maxlength="100" placeholder="e.g. Associative">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>description</label>
+                        <textarea name="structure_description" placeholder="e.g. Hash function indexed structure"></textarea>
+                    </div>
+                    <button type="submit" class="btn">// insert structure</button>
+                </form>
             </div>
-            <div class="field"><label>description</label>
-                <textarea name="structure_description" placeholder="e.g. Hash function indexed structure"></textarea></div>
-            <button type="submit" class="btn">// insert structure</button>
-        </form>
-        </div></div>
+        </div>
     </div>
 
-    <!-- IMPLEMENTATION -->
-    <div id="section-implementation" class="tab-section <?= $active==='implementation'?'active':'' ?>">
-        <div class="panel"><div class="panel-title">add implementation</div><div class="panel-body">
-        <form method="POST" action="index.php">
-            <input type="hidden" name="active_tab" value="implementation">
-            <div class="field"><label>language <span class="required">*</span></label>
-                <select name="impl_language_id" required>
-                    <option value="">select language...</option>
-                    <?php foreach ($languages as $l): ?>
-                        <option value="<?= (int)$l['language_id'] ?>"><?= htmlspecialchars($l['language_name'], ENT_QUOTES, 'UTF-8') ?></option>
-                    <?php endforeach; ?>
-                </select>
+    <!--  ADD IMPLEMENTATION  -->
+    <div id="section-implementation" class="tab-section <?= $active === 'implementation' ? 'active' : '' ?>">
+        <div class="panel">
+            <div class="panel-title">add implementation</div>
+            <div class="panel-body">
+                <form method="POST" action="index.php">
+                    <input type="hidden" name="active_tab" value="implementation">
+
+                    <div class="field">
+                        <label>language <span class="required">*</span></label>
+                        <select name="impl_language_id" required>
+                            <option value="">select language...</option>
+                            <?php foreach ($languages as $l): ?>
+                                <option value="<?= (int)$l['language_id'] ?>">
+                                    <?= htmlspecialchars($l['language_name'], ENT_QUOTES, 'UTF-8') ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field">
+                            <label>syntax</label>
+                            <input type="text" name="impl_syntax" maxlength="500" placeholder="e.g. print(value)">
+                        </div>
+                        <div class="field">
+                            <label>result / output</label>
+                            <input type="text" name="impl_result" maxlength="500" placeholder="e.g. Hello World">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>example</label>
+                        <textarea name="impl_example" placeholder="e.g. print('Hello', 42)"></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label>notes</label>
+                        <textarea name="impl_notes" placeholder="e.g. Supports multiple arguments"></textarea>
+                    </div>
+
+                    <hr class="divider">
+
+                    <div class="link-group">
+                        <div class="link-group-title">link to existing item <span style="color:var(--amber)">*</span></div>
+                        <div class="radio-row">
+                            <label class="radio-label">
+                                <input type="radio" name="impl_link_type" value="function" onchange="updateLinkDropdown()" checked>
+                                function
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="impl_link_type" value="operator" onchange="updateLinkDropdown()">
+                                operator
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="impl_link_type" value="structure" onchange="updateLinkDropdown()">
+                                data structure
+                            </label>
+                        </div>
+                        <select name="impl_link_id" id="link-dropdown" required>
+                            <option value="">select item...</option>
+                        </select>
+                        <div class="hint">links this implementation to a function / operator / structure via the junction table</div>
+                    </div>
+
+                    <button type="submit" class="btn">// insert implementation</button>
+                </form>
             </div>
-            <div class="field-row">
-                <div class="field"><label>syntax</label>
-                    <input type="text" name="impl_syntax" maxlength="500" placeholder="e.g. print(value)"></div>
-                <div class="field"><label>result / output</label>
-                    <input type="text" name="impl_result" maxlength="500" placeholder="e.g. Hello World"></div>
-            </div>
-            <div class="field"><label>example</label>
-                <textarea name="impl_example" placeholder="e.g. print('Hello', 42)"></textarea></div>
-            <div class="field"><label>notes</label>
-                <textarea name="impl_notes" placeholder="e.g. Supports multiple arguments"></textarea></div>
-            <hr class="divider">
-            <div class="link-group">
-                <div class="link-group-title">link to existing item <span style="color:var(--amber)">*</span></div>
-                <div class="radio-row">
-                    <label class="radio-label"><input type="radio" name="impl_link_type" value="function" onchange="updateLinkDropdown()" checked> function</label>
-                    <label class="radio-label"><input type="radio" name="impl_link_type" value="operator" onchange="updateLinkDropdown()"> operator</label>
-                    <label class="radio-label"><input type="radio" name="impl_link_type" value="structure" onchange="updateLinkDropdown()"> data structure</label>
-                </div>
-                <select name="impl_link_id" id="link-dropdown" required>
-                    <option value="">select item...</option>
-                </select>
-                <div class="hint">links this implementation to a function/operator/structure via the junction table</div>
-            </div>
-            <button type="submit" class="btn">// insert implementation</button>
-        </form>
-        </div></div>
+        </div>
     </div>
+
 </div>
 
 <footer>
-    <div>LANGREF // <span class="val">Admin Dashboard</span></div>
+    <div>Programming Language Lookup // <span class="val">Admin Dashboard</span></div>
     <div>access: <span class="val">SELECT + INSERT</span></div>
 </footer>
 
@@ -345,12 +713,16 @@ function switchTab(tab) {
 function updateLinkDropdown() {
     const type = document.querySelector('input[name="impl_link_type"]:checked').value;
     const dd   = document.getElementById('link-dropdown');
-    const data = type === 'function' ? FUNCTIONS : type === 'operator' ? OPERATORS : STRUCTURES;
+    const data = type === 'function' ? FUNCTIONS
+               : type === 'operator' ? OPERATORS
+               : STRUCTURES;
+
     dd.innerHTML = '<option value="">select item...</option>'
-        + data.map(item => '<option value="' + item.id + '">' + item.name + '</option>').join('');
+        + data.map(item => `<option value="${item.id}">${item.name}</option>`).join('');
 }
 
 updateLinkDropdown();
 </script>
+
 </body>
 </html>

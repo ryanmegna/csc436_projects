@@ -57,35 +57,53 @@ $categories = $pdo->query("
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg:         #000000;
-            --surface:    #080808;
-            --border:     #1a1a1a;
-            --border-lit: #252525;
-            --green:      #00ff88;
-            --green-dim:  #00cc6a;
-            --green-mute: #003d20;
-            --amber:      #ffb800;
-            --cyan:       #00e5ff;
-            --red:        #ff4444;
-            --purple:     #bf7fff;
-            --text:       #c8c8c8;
-            --muted:      #3a3a3a;
+            --bg:         #0d1117;
+            --surface:    #161b22;
+            --border:     #2a3038;
+            --border-lit: #363d47;
+            --green:      #3fb950;
+            --green-dim:  #2ea043;
+            --green-mute: #1a4a25;
+            --amber:      #e3b341;
+            --cyan:       #39c5cf;
+            --red:        #f85149;
+            --purple:     #d2a8ff;
+            --text:       #e6edf3;
+            --muted:      #8b949e;
+            --dim:        #6e7681;
+        }
+
+        body.light {
+            --bg:         #ffffff;
+            --surface:    #f6f8fa;
+            --border:     #d0d7de;
+            --border-lit: #c6ccd2;
+            --green:      #1a7f37;
+            --green-dim:  #116329;
+            --green-mute: #dafbe1;
+            --amber:      #9a6700;
+            --cyan:       #0550ae;
+            --red:        #cf222e;
+            --purple:     #6639ba;
+            --text:       #1f2328;
+            --muted:      #1f2328;
+            --dim:        #1f2328;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         html, body {
-            min-height: 100%;
+            min-height: 100vh;
             background: var(--bg);
             color: var(--text);
             font-family: 'JetBrains Mono', 'Courier New', monospace;
-            font-size: 13px;
-            line-height: 1.6;
+            font-size: 17px;
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
         }
 
-
-
-        /* HEADER */
+        .shell { max-width: 1200px; margin: 0 auto; padding: 28px 32px 48px; flex: 1; }
         header {
             background: var(--surface);
             border-bottom: 1px solid var(--border-lit);
@@ -97,8 +115,8 @@ $categories = $pdo->query("
         .brand { display: flex; align-items: baseline; gap: 10px; }
         .brand-name { color: var(--green); font-size: 1.1rem; font-weight: 700; letter-spacing: 3px; }
         .brand-sep  { color: var(--muted); }
-        .brand-sub  { color: #2a2a2a; font-size: 0.75rem; letter-spacing: 1px; }
-        .header-right { text-align: right; color: #2a2a2a; font-size: 0.7rem; line-height: 2; }
+        .brand-sub  { color: var(--dim); font-size: 0.75rem; letter-spacing: 1px; }
+        .header-right { text-align: right; color: var(--dim); font-size: 0.7rem; line-height: 2; }
         .header-right .val { color: var(--green-dim); }
 
         /* TABS */
@@ -111,7 +129,7 @@ $categories = $pdo->query("
         .tab {
             padding: 10px 20px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
+            font-size: 0.8rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             cursor: pointer;
@@ -126,12 +144,10 @@ $categories = $pdo->query("
         .tab:hover { color: var(--text); }
         .tab.active { color: var(--green); border-bottom-color: var(--green); }
 
-        /* SHELL */
-        .shell { max-width: 1200px; margin: 0 auto; padding: 28px 32px 48px; }
-
+        /* PROMPT */
         .prompt-line {
-            color: #2a2a2a;
-            font-size: 0.75rem;
+            color: var(--dim);
+            font-size: 0.82rem;
             margin-bottom: 22px;
         }
         .p-user { color: var(--green); }
@@ -154,7 +170,7 @@ $categories = $pdo->query("
         }
         .panel-title {
             padding: 8px 16px;
-            background: #050505;
+            background: var(--border);
             border-bottom: 1px solid var(--border-lit);
             color: var(--green);
             font-size: 0.68rem;
@@ -176,8 +192,8 @@ $categories = $pdo->query("
 
         .dd-group label {
             display: block;
-            color: #333;
-            font-size: 0.67rem;
+            color: var(--muted);
+            font-size: 0.75rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 7px;
@@ -186,21 +202,21 @@ $categories = $pdo->query("
 
         select {
             width: 100%;
-            background: #030303;
+            background: var(--surface);
             color: var(--green);
             border: 1px solid var(--border-lit);
-            padding: 8px 28px 8px 10px;
+            padding: 9px 28px 9px 10px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             cursor: pointer;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2300ff88' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%233fb950' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 10px center;
             transition: border-color 0.15s;
         }
         select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 1px var(--green-mute); }
-        select option { background: #000; color: var(--green); }
+        select option { background: var(--surface); color: var(--green); }
 
         /* compare dropdown */
         .compare-select { color: var(--purple) !important; }
@@ -217,35 +233,35 @@ $categories = $pdo->query("
         }
         .output-label { color: var(--cyan); font-size: 0.68rem; letter-spacing: 3px; text-transform: uppercase; }
         .output-label::before { content: '$ '; color: var(--green-dim); }
-        .row-count { color: #333; font-size: 0.72rem; }
+        .row-count { color: var(--dim); font-size: 0.8rem; }
         .row-count .n { color: var(--amber); }
 
         /* BROWSE TABLE */
         .table-wrap { border: 1px solid var(--border-lit); overflow: hidden; }
         table { width: 100%; border-collapse: collapse; }
-        thead { background: #050505; border-bottom: 1px solid var(--border-lit); }
+        thead { background: var(--border); border-bottom: 1px solid var(--border-lit); }
         thead th {
-            padding: 9px 14px;
+            padding: 10px 14px;
             text-align: left;
             color: var(--amber);
-            font-size: 0.66rem;
+            font-size: 0.75rem;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
         thead th::before { content: '#'; color: var(--green-mute); margin-right: 3px; }
         tbody tr { border-bottom: 1px solid var(--border); transition: background 0.08s; }
         tbody tr:last-child { border-bottom: none; }
-        tbody tr:hover { background: #0a0a0a; }
-        td { padding: 9px 14px; font-size: 0.8rem; vertical-align: top; }
+        tbody tr:hover { background: var(--surface); }
+        td { padding: 10px 14px; font-size: 0.9rem; vertical-align: top; }
         .f-name   { color: var(--green); font-weight: 700; }
         .f-symbol { color: var(--amber); font-weight: 700; }
-        .f-cat    { color: var(--cyan); font-size: 0.75rem; }
-        .f-lang   { color: var(--amber); font-size: 0.75rem; }
-        .f-kind   { color: #333; font-size: 0.72rem; font-style: italic; }
+        .f-cat    { color: var(--cyan); font-size: 0.85rem; }
+        .f-lang   { color: var(--amber); font-size: 0.85rem; }
+        .f-kind   { color: var(--dim); font-size: 0.82rem; font-style: italic; }
         .f-code   {
             color: var(--green-dim);
-            font-size: 0.72rem;
-            background: #050505;
+            font-size: 0.82rem;
+            background: var(--bg);
             padding: 2px 6px;
             border: 1px solid var(--border-lit);
             display: inline-block;
@@ -254,7 +270,7 @@ $categories = $pdo->query("
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .f-null { color: #2a2a2a; font-style: italic; }
+        .f-null { color: var(--dim); font-style: italic; }
 
         /* COMPARE CARDS GRID */
         .compare-grid {
@@ -265,14 +281,14 @@ $categories = $pdo->query("
         }
 
         .lang-card {
-            background: #030303;
+            background: var(--bg);
             border: 1px solid var(--border-lit);
             padding: 14px 16px;
         }
 
         .card-lang {
             color: var(--amber);
-            font-size: 0.72rem;
+            font-size: 0.8rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 10px;
@@ -283,17 +299,17 @@ $categories = $pdo->query("
 
         .card-row { margin-bottom: 8px; }
         .card-label {
-            color: #333;
-            font-size: 0.63rem;
+            color: var(--muted);
+            font-size: 0.72rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 3px;
         }
-        .card-value { color: var(--text); font-size: 0.78rem; }
+        .card-value { color: var(--text); font-size: 0.88rem; }
         .card-code {
             color: var(--green-dim);
-            font-size: 0.75rem;
-            background: #070707;
+            font-size: 0.85rem;
+            background: var(--surface);
             border: 1px solid var(--border);
             padding: 6px 8px;
             display: block;
@@ -301,14 +317,14 @@ $categories = $pdo->query("
             word-break: break-all;
         }
         .card-example { color: var(--cyan); }
-        .card-result  { color: var(--purple); font-size: 0.75rem; }
-        .card-notes   { color: #444; font-size: 0.72rem; font-style: italic; }
+        .card-result  { color: var(--purple); font-size: 0.85rem; }
+        .card-notes   { color: var(--muted); font-size: 0.82rem; font-style: italic; }
 
         .compare-empty {
             padding: 36px;
             text-align: center;
-            color: #2a2a2a;
-            font-size: 0.8rem;
+            color: var(--muted);
+            font-size: 0.9rem;
         }
         .compare-empty span { color: var(--purple); }
 
@@ -317,11 +333,25 @@ $categories = $pdo->query("
             display: none;
             padding: 36px;
             text-align: center;
-            color: #333;
+            color: var(--muted);
             border: 1px solid var(--border-lit);
-            font-size: 0.8rem;
+            font-size: 0.9rem;
         }
         #no-results::before { content: 'ERR: '; color: var(--red); }
+
+        /* LIGHT MODE TOGGLE */
+        #theme-toggle {
+            background: none;
+            border: 1px solid var(--border-lit);
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            cursor: pointer;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        #theme-toggle:hover { color: var(--text); border-color: var(--green); }
 
         /* SECTION VISIBILITY */
         .view-section { display: none; }
@@ -331,8 +361,8 @@ $categories = $pdo->query("
         footer {
             border-top: 1px solid var(--border);
             padding: 14px 32px;
-            color: #222;
-            font-size: 0.68rem;
+            color: var(--dim);
+            font-size: 0.75rem;
             letter-spacing: 1px;
             display: flex;
             justify-content: space-between;
@@ -348,6 +378,7 @@ $categories = $pdo->query("
         <span class="brand-sep">//</span>
         <span class="brand-sub">programming language reference database</span>
     </div>
+    <button id="theme-toggle" onclick="document.body.classList.toggle('light')">[ light mode ]</button>
 </header>
 
 <!-- TABS -->
@@ -498,7 +529,7 @@ $categories = $pdo->query("
 <footer>
     <div>CSC 436 // <span class="val">Group Project</span> // mbarbrack.rhody.dev</div>
     <div>access: <span class="val">READ-ONLY</span> // SELECT only</div>
-    <div>access: <span class="val">READ-ONLY</span> // SELECT only &nbsp;|&nbsp; <a href="admin/login.php" style="color:#2a2a2a; text-decoration:none; letter-spacing:1px;">// admin</a></div>
+    <div>access: <span class="val">READ-ONLY</span> // SELECT only &nbsp;|&nbsp; <a href="admin/login.php" style="color:var(--amber); text-decoration:none; letter-spacing:1px;">// admin</a></div>
 
 </footer>
 
@@ -706,7 +737,7 @@ function renderCompare() {
     const desc      = firstItem.description;
     const category  = firstItem.category;
 
-    let html = `<div style="padding:12px 16px 4px; color:#2a2a2a; font-size:0.72rem;">
+    let html = `<div style="padding:12px 16px 4px; color:var(--dim); font-size:0.82rem;">
         <span style="color:var(--cyan)">${esc(itemName)}</span>
         ${category ? `&nbsp;//&nbsp;<span style="color:var(--amber)">${esc(category)}</span>` : ''}
         ${desc     ? `&nbsp;&mdash;&nbsp;${esc(desc)}` : ''}
@@ -721,7 +752,7 @@ function renderCompare() {
 
         if (!data) {
             html += `<div class="card-row">
-                <div style="color:#333; font-size:0.78rem; font-style:italic;">
+                <div style="color:var(--muted); font-size:0.85rem; font-style:italic;">
                     no implementation found for ${esc(lname)}
                 </div>
             </div>`;
