@@ -1,49 +1,8 @@
--- phpMyAdmin SQL Dump
--- version 5.2.2
--- https://www.phpmyadmin.net/
---
--- Host: localhost:3306
--- Generation Time: Mar 01, 2026 at 07:45 AM
--- Server version: 5.7.44-48
--- PHP Version: 8.3.26
---
--- ============================================================
--- 3NF NORMALIZATION CHANGE LOG
--- ============================================================
---
--- Change: `version` moved from `implementation` to `language`
--- Issue:  `version` in `implementation` violated 3NF.
---         The dependency chain was:
---           implementation_id → language_id → version
---         meaning `version` was transitively dependent on a
---         non-key attribute (language_id) rather than directly
---         on the primary key (implementation_id).
--- Fix:    `version` has been moved to the `language` table,
---         where it correctly depends on language_id (its true
---         determinant). It has been removed from `implementation`.
--- Impact: Views vw_function_lookup, vw_operator_lookup, and
---         vw_structure_lookup updated to pull `version` from
---         `language` via JOIN. All exposed columns and data
---         remain identical to the original views.
--- ============================================================
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
--- --------------------------------------------------------
-
---
 -- Table structure for table `language`
---
--- CHANGE: Added `version` column. Version is a direct property
--- of a language, not of any individual implementation row.
---
 
 CREATE TABLE `language` (
   `language_id` int(11) NOT NULL,
@@ -51,9 +10,9 @@ CREATE TABLE `language` (
   `version` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+
 -- Dumping data for table `language`
---
+
 
 INSERT INTO `language` (`language_id`, `language_name`, `version`) VALUES
 (1, 'Python',     '3.x'),
@@ -65,11 +24,9 @@ INSERT INTO `language` (`language_id`, `language_name`, `version`) VALUES
 (7, 'Go',         NULL),
 (8, 'Rust',       NULL);
 
--- --------------------------------------------------------
 
---
 -- Table structure for table `data_structure`
---
+
 
 CREATE TABLE `data_structure` (
   `structure_id` int(11) NOT NULL,
@@ -78,9 +35,9 @@ CREATE TABLE `data_structure` (
   `description` text COLLATE utf8_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+
 -- Dumping data for table `data_structure`
---
+
 
 INSERT INTO `data_structure` (`structure_id`, `structure_name`, `category`, `description`) VALUES
 (1, 'Array',       'Linear',       'Fixed-size sequential collection'),
@@ -94,11 +51,8 @@ INSERT INTO `data_structure` (`structure_id`, `structure_name`, `category`, `des
 (9, 'Graph',       'Non-Linear',   'Nodes connected by edges'),
 (10,'Hash Table',  'Associative',  'Hash function indexed structure');
 
--- --------------------------------------------------------
 
---
 -- Table structure for table `function_table`
---
 
 CREATE TABLE `function_table` (
   `function_id` int(11) NOT NULL,
@@ -107,9 +61,9 @@ CREATE TABLE `function_table` (
   `description` text COLLATE utf8_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+
 -- Dumping data for table `function_table`
---
+
 
 INSERT INTO `function_table` (`function_id`, `function_name`, `category`, `description`) VALUES
 (1,  'print',  'I/O',       'Outputs text or values to standard output'),
@@ -123,11 +77,9 @@ INSERT INTO `function_table` (`function_id`, `function_name`, `category`, `descr
 (9,  'split',  'String',    'Splits a string into an array/list'),
 (10, 'join',   'String',    'Joins elements into a string');
 
--- --------------------------------------------------------
 
---
 -- Table structure for table `operator`
---
+
 
 CREATE TABLE `operator` (
   `operator_id` int(11) NOT NULL,
@@ -137,9 +89,9 @@ CREATE TABLE `operator` (
   `symbol` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+
 -- Dumping data for table `operator`
---
+
 
 INSERT INTO `operator` (`operator_id`, `operator_name`, `category`, `description`, `symbol`) VALUES
 (1,  'Addition',      'Arithmetic', 'Adds two operands',                                  '+'),
@@ -159,14 +111,8 @@ INSERT INTO `operator` (`operator_id`, `operator_name`, `category`, `description
 (15, 'Bitwise OR',    'Bitwise',    'Bitwise OR operation',                               '|'),
 (16, 'Strict Equal',  'Comparison', 'Checks strict equality of both value and type',      '===');
 
--- --------------------------------------------------------
 
---
 -- Table structure for table `implementation`
---
--- CHANGE: `version` column removed. Version is now stored in
--- the `language` table where it belongs (language_id → version).
---
 
 CREATE TABLE `implementation` (
   `implementation_id` int(11) NOT NULL,
@@ -178,9 +124,9 @@ CREATE TABLE `implementation` (
   `syntax` text COLLATE utf8_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+
 -- Dumping data for table `implementation`
---
+
 
 INSERT INTO `implementation` (`implementation_id`, `language_id`, `date_added`, `example`, `result`, `notes`, `syntax`) VALUES
 (1,  1, '2026-02-22', 'print(\"Score:\", 95, sep=\" \")',                                                                     'Score: 95',                              'Supports multiple arguments with customizable separator',                              'print(value, sep=\" \", end=\"\\n\")'),
@@ -239,20 +185,16 @@ INSERT INTO `implementation` (`implementation_id`, `language_id`, `date_added`, 
 (54, 3, '2026-02-22', 'boolean isEmpty = list.isEmpty();\nboolean hasItems = !isEmpty;',                                     'true if list has items',                 'Prefix operator, highest precedence among logical ops',                                '!a'),
 (55, 1, '2026-02-22', 'name = \"Alice\"\ncount = 0\ncount += 1  # augmented assignment',                                      'name=\"Alice\", count=1',                 'Also: +=, -=, *=, /=, //=, **=, %=',                                                  'variable = value');
 
--- --------------------------------------------------------
-
---
 -- Table structure for table `function_implementation`
---
 
 CREATE TABLE `function_implementation` (
   `implementation_id` int(11) NOT NULL,
   `function_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+
 -- Dumping data for table `function_implementation`
---
+
 
 INSERT INTO `function_implementation` (`implementation_id`, `function_id`) VALUES
 (1,  1),
@@ -277,20 +219,16 @@ INSERT INTO `function_implementation` (`implementation_id`, `function_id`) VALUE
 (20, 10),
 (21, 10);
 
--- --------------------------------------------------------
 
---
 -- Table structure for table `operator_implementation`
---
 
 CREATE TABLE `operator_implementation` (
   `implementation_id` int(11) NOT NULL,
   `operator_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+
 -- Dumping data for table `operator_implementation`
---
 
 INSERT INTO `operator_implementation` (`implementation_id`, `operator_id`) VALUES
 (35, 1),
@@ -315,20 +253,18 @@ INSERT INTO `operator_implementation` (`implementation_id`, `operator_id`) VALUE
 (54, 12),
 (55, 13);
 
--- --------------------------------------------------------
 
---
 -- Table structure for table `structure_implementation`
---
+
 
 CREATE TABLE `structure_implementation` (
   `implementation_id` int(11) NOT NULL,
   `structure_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+
 -- Dumping data for table `structure_implementation`
---
+
 
 INSERT INTO `structure_implementation` (`implementation_id`, `structure_id`) VALUES
 (22, 2),
@@ -345,11 +281,8 @@ INSERT INTO `structure_implementation` (`implementation_id`, `structure_id`) VAL
 (33, 6),
 (34, 6);
 
--- --------------------------------------------------------
 
---
 -- Table structure for table 'users'
---
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -358,9 +291,8 @@ CREATE TABLE `users` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+
 -- Dumping data for table `users`
---
 
 INSERT INTO `users` (`id`, `email`, `password_hash`, `created_at`) VALUES
 (1, 'john.smith@example.com', '$2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36DvDType', '2026-02-01 08:30:00'),
@@ -369,11 +301,8 @@ INSERT INTO `users` (`id`, `email`, `password_hash`, `created_at`) VALUES
 (4, 'alice.williams@example.com', '$2y$10$1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrst', '2026-02-15 09:20:15'),
 (5, 'charlie.brown@example.com', '$2y$10$abcDEF123456ghiJKL789opqRST012uvwXYZ345ABCdefGHIjklMNOp', '2026-02-20 11:30:45');
 
--- --------------------------------------------------------
 
---
 -- Table structure for table 'audit_logs'
---
 
 CREATE TABLE `audit_logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -384,9 +313,9 @@ CREATE TABLE `audit_logs` (
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+
 -- Dumping data for table `audit_logs`
---
+
 
 INSERT INTO `audit_logs` (`id`, `user_id`, `action`, `table_name`, `timestamp`) VALUES
 (1, 1, 'INSERT', 'users', '2026-02-01 08:35:00'),
@@ -405,98 +334,91 @@ INSERT INTO `audit_logs` (`id`, `user_id`, `action`, `table_name`, `timestamp`) 
 (14, 3, 'UPDATE', 'language', '2026-02-24 15:10:50'),
 (15, 5, 'INSERT', 'implementation', '2026-02-25 09:30:00');
 
--- --------------------------------------------------------
 
---
 -- Indexes for table `language`
---
+
 ALTER TABLE `language`
   ADD PRIMARY KEY (`language_id`),
   ADD UNIQUE KEY `language_name` (`language_name`);
 
---
+
 -- Indexes for table `data_structure`
---
+
 ALTER TABLE `data_structure`
   ADD PRIMARY KEY (`structure_id`);
 
---
+
 -- Indexes for table `function_table`
---
+
 ALTER TABLE `function_table`
   ADD PRIMARY KEY (`function_id`);
 
---
+
 -- Indexes for table `operator`
---
+
 ALTER TABLE `operator`
   ADD PRIMARY KEY (`operator_id`);
 
---
+
 -- Indexes for table `implementation`
---
+
 ALTER TABLE `implementation`
   ADD PRIMARY KEY (`implementation_id`),
   ADD KEY `idx_impl_language` (`language_id`);
 
---
+
 -- Indexes for table `function_implementation`
---
+
 ALTER TABLE `function_implementation`
   ADD PRIMARY KEY (`implementation_id`),
   ADD KEY `idx_func_impl_function` (`function_id`);
 
---
+
 -- Indexes for table `operator_implementation`
---
+
 ALTER TABLE `operator_implementation`
   ADD PRIMARY KEY (`implementation_id`),
   ADD KEY `idx_op_impl_operator` (`operator_id`);
 
---
+
 -- Indexes for table `structure_implementation`
---
+
 ALTER TABLE `structure_implementation`
   ADD PRIMARY KEY (`implementation_id`),
   ADD KEY `idx_struct_impl_structure` (`structure_id`);
 
--- --------------------------------------------------------
 
---
 -- AUTO_INCREMENT for table `language`
---
+
 ALTER TABLE `language`
   MODIFY `language_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
---
+
 -- AUTO_INCREMENT for table `data_structure`
---
+
 ALTER TABLE `data_structure`
   MODIFY `structure_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
---
+
 -- AUTO_INCREMENT for table `function_table`
---
+
 ALTER TABLE `function_table`
   MODIFY `function_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
---
+
 -- AUTO_INCREMENT for table `operator`
---
+
 ALTER TABLE `operator`
   MODIFY `operator_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
---
+
 -- AUTO_INCREMENT for table `implementation`
---
+
 ALTER TABLE `implementation`
   MODIFY `implementation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
--- --------------------------------------------------------
 
---
 -- Foreign key constraints
---
 
 ALTER TABLE `implementation`
   ADD CONSTRAINT `fk_impl_language`
@@ -527,19 +449,9 @@ ALTER TABLE `structure_implementation`
     FOREIGN KEY (`structure_id`) REFERENCES `data_structure` (`structure_id`)
     ON DELETE CASCADE ON UPDATE CASCADE;
 
--- --------------------------------------------------------
 
---
--- Views
---
--- CHANGE: All three views updated to JOIN through `language`
--- for `version`, replacing the former `i.version` reference.
--- All exposed columns remain identical to the original views.
---
-
---
 -- View: vw_function_lookup
---
+
 DROP TABLE IF EXISTS `vw_function_lookup`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`your_username`@`localhost` SQL SECURITY DEFINER
 VIEW `vw_function_lookup` AS
@@ -559,9 +471,9 @@ VIEW `vw_function_lookup` AS
   JOIN `function_table`           f  ON fi.`function_id`     = f.`function_id`
   ORDER BY f.`function_name` ASC, l.`language_name` ASC;
 
---
+
 -- View: vw_operator_lookup
---
+
 DROP TABLE IF EXISTS `vw_operator_lookup`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`your_username`@`localhost` SQL SECURITY DEFINER
 VIEW `vw_operator_lookup` AS
@@ -582,9 +494,9 @@ VIEW `vw_operator_lookup` AS
   JOIN `operator`                o  ON oi.`operator_id`      = o.`operator_id`
   ORDER BY o.`operator_name` ASC, l.`language_name` ASC;
 
---
+
 -- View: vw_structure_lookup
---
+
 DROP TABLE IF EXISTS `vw_structure_lookup`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`your_username`@`localhost` SQL SECURITY DEFINER
 VIEW `vw_structure_lookup` AS
@@ -604,13 +516,9 @@ VIEW `vw_structure_lookup` AS
   JOIN `data_structure`           ds ON si.`structure_id`     = ds.`structure_id`
   ORDER BY ds.`structure_name` ASC, l.`language_name` ASC;
 
---
+
 -- View: vw_function_quick_reference
---
--- Restrictive view: exposes only language, function name, and syntax.
--- Hides example, result, notes, date_added, and all category detail.
--- Intended for a quick-lookup use case where only the syntax is needed.
---
+
 DROP TABLE IF EXISTS `vw_function_quick_reference`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`your_username`@`localhost` SQL SECURITY DEFINER
 VIEW `vw_function_quick_reference` AS
@@ -625,14 +533,9 @@ VIEW `vw_function_quick_reference` AS
   JOIN `function_table`           f  ON fi.`function_id`     = f.`function_id`
   ORDER BY f.`function_name` ASC, l.`language_name` ASC;
 
---
+
 -- View: vw_operator_category_summary
---
--- Restrictive view: exposes only language, operator name, category, and symbol.
--- Hides syntax, example, result, notes, and date_added.
--- Intended for a browsing/filtering use case where only the operator
--- type and symbol are relevant, without verbose code details.
---
+
 DROP TABLE IF EXISTS `vw_operator_category_summary`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`your_username`@`localhost` SQL SECURITY DEFINER
 VIEW `vw_operator_category_summary` AS
@@ -649,6 +552,3 @@ VIEW `vw_operator_category_summary` AS
 
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
