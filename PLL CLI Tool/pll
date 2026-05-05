@@ -1,0 +1,161 @@
+#!/opt/anaconda3/bin/python3
+import argparse
+import mysql.connector
+
+DB_CONFIG = {
+    "host": "localhost",
+    "user": "root",
+    "password": "root",
+    "database": "pll_db",
+    "port": 8889
+}
+
+VIEWS = {
+    "function": ("vw_function_lookup", "function_name"),
+    "operator": ("vw_operator_lookup", "operator_name"),
+    "structure": ("vw_structure_lookup", "structure_name")
+}
+
+def connect():
+    return mysql.connector.connect(**DB_CONFIG)
+
+def search_lookup(language, topic, lookup_type=None):
+    conn = connect()
+    cursor = conn.cursor(dictionary=True)
+
+    views_to_search = [lookup_type] if lookup_type else VIEWS.keys()
+
+    for vtype in views_to_search:
+        view, column = VIEWS[vtype]
+
+        query = f"""
+            SELECT *
+            FROM {view}
+            WHERE LOWER(language_name) = LOWER(%s)
+              AND LOWER({column}) LIKE LOWER(%s)
+        """
+
+        cursor.execute(query, (language, f"%{topic}%"))
+        results = cursor.fetchall()
+
+        if results:
+            print_results(results, vtype)
+            conn.close()
+            return
+
+    print("No results found.")
+    conn.close()
+
+def compare_lookup(source_lang, target_lang, topic, lookup_type=None):
+    conn = connect()
+    cursor = conn.cursor(dictionary=True)
+
+    views_to_search = [lookup_type] if lookup_type else VIEWS.keys()
+
+    for vtype in views_to_search:
+        view, column = VIEWS[vtype]
+        
+        # simple mapping for demo
+        topic_map = {
+            "array": "list",
+            "arrays": "list"
+        }
+
+        topic = topic_map.get(topic.lower(), topic)
+
+
+
+        query = f"""
+            SELECT *
+            FROM {view}
+            WHERE LOWER(language_name) IN (LOWER(%s), LOWER(%s))
+              AND LOWER({column}) LIKE LOWER(%s)
+            ORDER BY FIELD(LOWER(language_name), LOWER(%s), LOWER(%s))
+        """
+
+        cursor.execute(
+            query,
+            (
+                source_lang,
+                target_lang,
+                f"%{topic}%",
+                source_lang,
+                target_lang
+            )
+        )
+
+        results = cursor.fetchall()
+
+        if results:
+            print(f"\n=== {source_lang.upper()} → {target_lang.upper()} COMPARISON FOR '{topic.upper()}' ===\n")
+            print_results(results, vtype, show_header=False)
+            conn.close()
+            return
+
+    print("No comparison results found.")
+    conn.close()
+
+def print_results(rows, lookup_type, show_header=True):
+    if show_header:
+        print(f"\n=== {lookup_type.upper()} LOOKUP ===\n")
+
+    for row in rows:
+        print(f"Language: {row.get('language_name')}")
+        print(f"Version: {row.get('version')}")
+
+        if lookup_type == "function":
+            print(f"Function: {row.get('function_name')}")
+        elif lookup_type == "operator":
+            print(f"Operator: {row.get('operator_name')}")
+            print(f"Symbol: {row.get('symbol')}")
+        elif lookup_type == "structure":
+            print(f"Structure: {row.get('structure_name')}")
+
+        print(f"Category: {row.get('category')}")
+        print(f"Syntax: {row.get('syntax')}")
+        print(f"Example:\n{row.get('example')}")
+        print(f"Result: {row.get('result')}")
+        print(f"Notes: {row.get('notes')}")
+        print("-" * 40)
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Programming Language Lookup CLI"
+    )
+
+    parser.add_argument(
+        "args",
+        nargs="+",
+        help="Example: pll python print OR pll python c++ array"
+    )
+
+    parser.add_argument(
+        "-t",
+        "--type",
+        choices=["function", "operator", "structure"],
+        help="Lookup type"
+    )
+
+    parsed = parser.parse_args()
+    args = parsed.args
+
+    if len(args) == 2:
+        language = args[0]
+        topic = args[1]
+        search_lookup(language, topic, parsed.type)
+
+    elif len(args) == 3:
+        source_lang = args[0]
+        target_lang = args[1]
+        topic = args[2]
+        compare_lookup(source_lang, target_lang, topic, parsed.type)
+
+    else:
+        print("Usage:")
+        print("  pll python print")
+        print("  pll c++ array")
+        print("  pll python c++ array")
+        print("  pll --type structure python c++ array")
+
+if __name__ == "__main__":
+    main()
